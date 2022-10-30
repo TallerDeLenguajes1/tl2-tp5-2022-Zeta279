@@ -38,7 +38,14 @@ namespace TP5.Models
 
             foreach (var pedido in PedidoList)
             {
-                newList.Add(new PedidoViewModel(pedido.Key, pedido.Value.Detalles, new CadeteViewModel(pedido.Value.Cadete.id, pedido.Value.Cadete.nombre, pedido.Value.Cadete.direccion, pedido.Value.Cadete.telefono), pedido.Value.cliente, pedido.Value.EstaEnCurso(), pedido.Value.FueEntregado()));
+                if(pedido.Value.Cadete is not null)
+                {
+                    newList.Add(new PedidoViewModel(pedido.Key, pedido.Value.Detalles, new CadeteViewModel(pedido.Value.Cadete.id, pedido.Value.Cadete.nombre, pedido.Value.Cadete.direccion, pedido.Value.Cadete.telefono), pedido.Value.cliente, pedido.Value.EstaEnCurso(), pedido.Value.FueEntregado()));
+                }
+                else
+                {
+                    newList.Add(new PedidoViewModel(pedido.Key, pedido.Value.Detalles, null, pedido.Value.cliente, pedido.Value.EstaEnCurso(), pedido.Value.FueEntregado()));
+                }
             }
 
             return newList;
@@ -256,7 +263,7 @@ namespace TP5.Models
             if (pedido.FueEntregado()) pedEntregado = 1;
 
             if (!pedido.EstaEnCurso() && !pedido.FueEntregado()) cadID = 0;
-            else if (pedido.FueEntregado() && pedido.Cadete is null) cadID = -1;
+            if (pedido.Cadete is null) cadID = -1;
             else cadID = pedido.Cadete.id;
 
             return $"{pedido.Nro};{pedido.Detalles};{pedido.cliente.id};{pedido.cliente.nombre};{pedido.cliente.direccion};{pedido.cliente.telefono};{pedido.cliente.DatosRef};{cadID};{pedEnCurso};{pedEntregado}\n";
@@ -272,7 +279,7 @@ namespace TP5.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ha ocurrido un error (IngresarPedido): " + ex.Message);
+                Console.WriteLine("Ha ocurrido un error (IngresarPedido(PedidoModel)): " + ex.Message);
             }
         }
 

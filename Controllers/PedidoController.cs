@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TP5.Models;
+using TP5.ViewModels;
 
 namespace TP5.Controllers
 {
@@ -10,17 +11,24 @@ namespace TP5.Controllers
             return View(DataModel.PedidoVList);
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(string det, int idc, string nomc, string direc, long tel, string datos)
+        public ActionResult Create(CrearPedidoViewModel pedido)
         {
-            DataModel.IngresarPedido(det, idc, nomc, direc, tel, datos);
-
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente, pedido.DatosRefCliente);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Error", new { error = "No se ha podido crear el pedido" });
+            }
         }
 
         public ActionResult Details(int id)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using TP5.Models;
 
@@ -47,32 +48,45 @@ namespace TP5.ViewModels
         }
     }
 
-    class CrearPedidoViewModel
+    public class CrearPedidoViewModel
     {
         [AllowNull]
+        [DisplayName("Detalles:")]
         public string Detalles { get; set; }
 
-        [AllowNull]
-        public CadeteViewModel Cadete { get; set; }
+        [Required]
+        [DisplayName("ID:")]
+        public int IDCliente { get; set; }
 
         [Required]
-        public ClienteModel Cliente { get; set; }
+        [DisplayName("Nombre:")]
+        public string NombreCliente { get; set; }
 
-        public bool EnCurso { get; set; }
-        public bool Entregado { get; set; }
+        [Required]
+        [DisplayName("Dirección:")]
+        public string DireccionCliente { get; set; }
+
+        [Required]
+        [DisplayName("Teléfono:")]
+        public long TelefonoCliente { get; set; }
+
+        [AllowNull]
+        [DisplayName("Datos de referencia:")]
+        public string DatosRefCliente { get; set; }
 
         public CrearPedidoViewModel()
         {
 
         }
 
-        public CrearPedidoViewModel(string detalles, CadeteViewModel cadete, ClienteModel cliente)
+        public CrearPedidoViewModel(string detalles, int iDCliente, string nombreCliente, string direccionCliente, long telefonoCliente, string datosRefCliente)
         {
             Detalles = detalles;
-            Cadete = cadete;
-            Cliente = cliente;
-            EnCurso = false;
-            Entregado = false;
+            IDCliente = iDCliente;
+            NombreCliente = nombreCliente;
+            DireccionCliente = direccionCliente;
+            TelefonoCliente = telefonoCliente;
+            DatosRefCliente = datosRefCliente;
         }
     }
 }
