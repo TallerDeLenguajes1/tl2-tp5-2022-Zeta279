@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Crear pedido";
+}
+
+<section class="crear-pedido">
+    <h2>Crear pedido</h2>
+    <form method="post">
+        <h3>Datos del pedido</h3>
+        <label for="det">Detalles</label>
+            <input type="text" name="det" id="det">
+        <h4>Datos del cliente</h4>
+        <label for="idc">ID </label>
+            <input type="number" name="idc" id="idc">
+        <label for="nomc">Nombre</label>
+            <input type="text" name="nomc" id="nomc">
+        <label for="direc">Dirección</label>
+            <input type="text" name="direc" id="direc">
+        <label for="tel">Teléfono</label>
+            <input type="number" name="tel" id="tel">
+        <label for="datos">Datos de referencia</label>
+            <input type="text" name="datos" id="datos">
+        <input type="submit" value="Ingresar pedido">
+    </form>
+</section>

@@ -1,0 +1,136 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+table{
+  border-collapse: collapse;
+}
+
+table th{
+  background-color: steelblue;
+  color: white;
+  text-align: center;
+  padding: 0.5em;
+  border: 1px black solid;
+}
+
+table td{
+  border: 1px gray solid;
+  text-align: center;
+  padding: 0.8em;
+}
+
+table tr:nth-child(even){
+  background-color: rgb(226, 226, 226);
+}
+
+.cadetes a, .pedidos a{
+  text-decoration: none;
+  color: white;
+  font-size: small;
+  padding: 0.5em;
+  margin: 0.5em;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.cadete-editar, .pedido-estado, .pedido-asignar{
+  background-color: rgb(47, 148, 47);
+}
+
+.cadete-editar:hover, .pedido-estado:hover, .pedido-asignar:hover{
+  background-color: rgb(39, 121, 39);
+}
+
+.cadete-borrar, .pedido-borrar{
+  background-color: rgb(212, 54, 54);
+}
+
+.cadete-borrar:hover, .pedido-borrar:hover{
+  background-color: rgb(173, 44, 44);
+}
+
+.cadete-detalles, .pedido-detalles{
+  background-color: slategray;
+}
+
+.cadete-detalles:hover, .pedido-detalles:hover{
+  background-color: rgb(94, 107, 121);
+}
+
+.pedidos a{
+  text-decoration: none;
+}
+
+.table-botones{
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+  margin: 0;
+}
+
+.cadete-crear a, .pedido-crear a{
+  text-decoration: none;
+  display: block;
+  padding: 0.1em 0.5em;
+  color: white;
+  font-size: 20px;
+  background-color: rgb(40, 199, 40);
+  text-align: center;
+  border-radius: 10px;
+}
+
+.cadete-crear, .pedido-crear{
+  display: inline-block;
+  margin: 1em 0;
+}
+
+label{
+  display: block;
+  margin: 0.2em 0;
+}
+
+input[type="submit"], button{
+  background-color: gray;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.5em;
+  font-weight: bold;
+  color: white;
+  display: block;
+  margin: auto;
+  margin-top: 1em;
+}
+
+input{
+  margin-bottom: 1em;
+}
+
+form{
+  margin: auto;
+  border: 1px gray solid;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1em;
+  width: fit-content;
+}
+
+.crear-cadete h2, .crear-pedido h2{
+  text-align: center;
+  margin: 1em 0;
+}

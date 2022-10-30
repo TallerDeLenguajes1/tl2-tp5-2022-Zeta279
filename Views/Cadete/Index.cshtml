@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Ver cadetes";
+}
+
+@using TP5.ViewModels
+@model List<CadeteViewModel>
+
+<section class="cadete-crear">
+    <a asp-controller="Cadete" asp-action="Create">+</a>
+</section>
+<section class="cadetes">
+    <table>
+        <thead>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+        </thead>
+        <tbody>
+            @foreach (var cadete in Model)
+            {
+                <tr>
+                    <td>@cadete.nombre</td>
+                    <td>@cadete.direccion</td>
+                    <td>@cadete.telefono</td>
+                    <td><section class="table-botones"><a href="/Cadete/Edit/@cadete.CadeteId" class="cadete-editar">Editar</a><a href="/Cadete/Delete/@cadete.CadeteId" class="cadete-borrar">Borrar</a></section></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

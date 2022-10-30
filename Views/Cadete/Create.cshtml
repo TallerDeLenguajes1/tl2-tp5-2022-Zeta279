@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Crear cadete";
+}
+
+@model TP5.ViewModels.CrearCadeteViewModel
+
+<section class="crear-cadete">
+    <h2>Crear cadete</h2>
+    <form method="post">
+        <h3>Datos del cadete</h3>
+        <label asp-for="@Model.Nombre"></label>
+        <input asp-for="@Model.Nombre">
+        <label asp-for="@Model.Direccion"></label>
+        <input asp-for="@Model.Direccion">
+        <label asp-for="@Model.Tel"></label>
+        <input asp-for="@Model.Tel">
+        <button>Ingresar</button>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

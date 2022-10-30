@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Detalles del pedido";
+}
+@model PedidoModel
+
+<section class="detalles-pedido">
+    <p><strong>Número: </strong>@Model.Nro</p>
+    <p><strong>Detalles: </strong>@Model.Detalles</p>
+    <h2>Datos del cliente</h2>
+    <p><strong>Nombre: </strong>@Model.cliente.nombre</p>
+    <p><strong>Dirección: </strong>@Model.cliente.direccion</p>
+    <p><strong>Teléfono: </strong>@Model.cliente.telefono</p>
+    @if(Model.EstaEnCurso() || Model.FueEntregado()){
+        @if(Model.Cadete is null)
+        {
+            <p>El cadete fue borrado</p>
+        }
+        else
+        {
+            <a asp-controller="Cadete" asp-action="Details" asp-route-id="@Model.Cadete.id" class="datos-cadete">Ver datos del cadete</a>
+        }
+    }
+    else{
+        <p>No se asignó a ningun cadete</p>
+    }
+
+</section>

@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Editar cadete";
+}
+
+@model TP5.ViewModels.EditarCadeteViewModel
+
+<section class="editar-cadete">
+    <h2>Editar cadete</h2>
+    <form method="post">
+        <h3>Datos del cadete</h3>
+        <input asp-for="@Model.ID" value="@Model.ID" hidden>
+        <label asp-for="@Model.Nombre"></label>
+        <input asp-for="@Model.Nombre" value="@Model.Nombre">
+        <label asp-for="@Model.Direccion"></label>
+        <input asp-for="@Model.Direccion" value="@Model.Direccion">
+        <label asp-for="@Model.Tel"></label>
+        <input asp-for="@Model.Tel" value="@Model.Tel">
+        <button>Editar</button>
+    </form>
+</section>

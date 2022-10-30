@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Pedidos";
+}
+
+@model List<TP5.ViewModels.PedidoViewModel>
+
+<section class="pedido-crear">
+    <a asp-controller="Pedido" asp-action="Create">+</a>
+</section>
+
+<section class="pedidos">
+    <table>
+        <thead>
+            <th>Detalles</th>
+            <th>Estado</th>
+            <th>Cadete</th>
+            <!-- <th>Acciones</th> -->
+        </thead>
+        <tbody>
+            @foreach(var pedido in Model)
+            {
+                <tr>
+                    <td>@pedido.Detalles</td>
+                    @if (pedido.Entregado)
+                    {
+                        <td>Entregado</td>
+                        @if(pedido.Cadete is null)
+                        {
+                            <td><i>Borrado</i></td>
+                        }
+                        else
+                        {
+                            <td>@pedido.Cadete.nombre</td>
+                        }
+                    }
+                    else
+                    {
+                        @if (pedido.EnCurso)
+                        {
+                            <td>En curso</td>
+                            <td>@pedido.Cadete.nombre</td>
+                        }
+                        else
+                        {
+                            <td>Pendiente</td>
+                            <td>No asignado</td>
+                        }
+                    }
+                    <!-- 
+                    <td><section class="table-botones">
+                    if (!pedido.Entregado && !pedido.EnCurso)
+                    {
+                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="pedido.Key" class="pedido-asignar">Asignar</a>
+                        <a asp-controller="Pedido" asp-action="Delete" asp-route-id="pedido.Key" class="pedido-borrar">Cancelar</a>
+                    }
+                    else
+                    {
+                        if (pedido.Value.EstaEnCurso() && !pedido.Value.FueEntregado())
+                        {
+                            <a asp-controller="Pedido" asp-action="Estado" asp-route-id="pedido.Key" class="pedido-estado">Cambiar estado</a>
+                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="pedido.Key" class="pedido-borrar">Cancelar</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="pedido.Key" class="pedido-borrar">Borrar</a>
+                        }
+                    }
+                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="pedido.Key" class="pedido-detalles">Detalles</a>
+                    </section></td>
+                    -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
