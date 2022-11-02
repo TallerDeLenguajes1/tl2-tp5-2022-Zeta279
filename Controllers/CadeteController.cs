@@ -72,7 +72,7 @@ namespace TP5.Controllers
         public ActionResult Delete(int id)
         {
             if (DataModel.BorrarCadete(id)) return RedirectToAction("Index");
-            else return RedirectToAction("Error", new { error = "No es posible eliminar un cadete con un pedido en curso" });
+            else return RedirectToAction("Error", new { error = "Ocurrió un error al intentar borrar el cadete" });
         }
     }
 }

@@ -33,8 +33,14 @@ namespace TP5.Controllers
 
         public ActionResult Details(int id)
         {
-            if (DataModel.PedidoList.ContainsKey(id)) return View(DataModel.PedidoList[id]);
-            else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
+            if (DataModel.PedidoList.ContainsKey(id))
+            {
+                foreach(var pedido in DataModel.PedidoVList)
+                {
+                    if (pedido.NumPedido == id) return View(pedido);
+                }
+            }
+            return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
         }
 
         public ActionResult Delete(int id)

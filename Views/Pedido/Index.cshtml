@@ -14,7 +14,7 @@
             <th>Detalles</th>
             <th>Estado</th>
             <th>Cadete</th>
-            <!-- <th>Acciones</th> -->
+            <th>Acciones</th>
         </thead>
         <tbody>
             @foreach(var pedido in Model)
@@ -46,28 +46,28 @@
                             <td>No asignado</td>
                         }
                     }
-                    <!-- 
+                    
                     <td><section class="table-botones">
-                    if (!pedido.Entregado && !pedido.EnCurso)
+                    @if (!@pedido.Entregado && !@pedido.EnCurso)
                     {
-                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="pedido.Key" class="pedido-asignar">Asignar</a>
-                        <a asp-controller="Pedido" asp-action="Delete" asp-route-id="pedido.Key" class="pedido-borrar">Cancelar</a>
+                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Asignar</a>
+                        <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Cancelar</a>
                     }
                     else
                     {
-                        if (pedido.Value.EstaEnCurso() && !pedido.Value.FueEntregado())
+                        @if (@pedido.EnCurso && !@pedido.Entregado)
                         {
-                            <a asp-controller="Pedido" asp-action="Estado" asp-route-id="pedido.Key" class="pedido-estado">Cambiar estado</a>
-                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="pedido.Key" class="pedido-borrar">Cancelar</a>
+                            <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.NumPedido" class="pedido-estado">Cambiar estado</a>
+                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Cancelar</a>
                         }
                         else
                         {
-                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="pedido.Key" class="pedido-borrar">Borrar</a>
+                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Borrar</a>
                         }
                     }
-                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="pedido.Key" class="pedido-detalles">Detalles</a>
+                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.NumPedido" class="pedido-detalles">Detalles</a>
                     </section></td>
-                    -->
+                    
                 </tr>
             }
         </tbody>

@@ -51,27 +51,27 @@ namespace TP5.ViewModels
     public class CrearPedidoViewModel
     {
         [AllowNull]
-        [DisplayName("Detalles:")]
+        [DisplayName("Detalles")]
         public string Detalles { get; set; }
 
         [Required]
-        [DisplayName("ID:")]
+        [DisplayName("ID")]
         public int IDCliente { get; set; }
 
         [Required]
-        [DisplayName("Nombre:")]
+        [DisplayName("Nombre")]
         public string NombreCliente { get; set; }
 
         [Required]
-        [DisplayName("Dirección:")]
+        [DisplayName("Dirección")]
         public string DireccionCliente { get; set; }
 
         [Required]
-        [DisplayName("Teléfono:")]
+        [DisplayName("Teléfono")]
         public long TelefonoCliente { get; set; }
 
         [AllowNull]
-        [DisplayName("Datos de referencia:")]
+        [DisplayName("Datos de referencia")]
         public string DatosRefCliente { get; set; }
 
         public CrearPedidoViewModel()

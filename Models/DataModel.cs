@@ -89,7 +89,7 @@ namespace TP5.Models
                     try
                     {
                         lista.Add(Int32.Parse(aux[0]), new PedidoModel(Int32.Parse(aux[0]), aux[1], Int32.Parse(aux[2]), aux[3], aux[4], long.Parse(aux[5]), aux[6]));
-                        if(Int32.Parse(aux[7]) == -1 || !CadeteList.ContainsKey(Int32.Parse(aux[7]))){
+                        if(Int32.Parse(aux[7]) == -1){
                             lista[Int32.Parse(aux[0])].AsignarCadete(null);
                             lista[Int32.Parse(aux[0])].EntregarPedido();
                         }
@@ -101,7 +101,7 @@ namespace TP5.Models
                                 lista[Int32.Parse(aux[0])].EntregarPedido();
                             }
                         }
-                        IDPedidos = Int32.Parse(aux[7]);
+                        IDPedidos = Int32.Parse(aux[0]) + 1;
                     }
                     catch (Exception ex)
                     {
@@ -141,6 +141,8 @@ namespace TP5.Models
             {
                 IngresarCadete(cadetes.Value);
             }
+
+            CadeteVList = ObtenerViewCadetes();
         }
 
         static public void RestaurarDatos()
@@ -160,7 +162,7 @@ namespace TP5.Models
             {
                 foreach(var pedido in PedidoList)
                 {
-                    if (pedido.Value.Cadete.id == id)
+                    if (pedido.Value.Cadete is not null && pedido.Value.Cadete.id == id)
                     {
                         pedido.Value.BorrarCadete();
                         break;
@@ -168,7 +170,6 @@ namespace TP5.Models
                 }
 
                 CadeteList.Remove(id);
-                CadeteVList = ObtenerViewCadetes();
                 
                 ActualizarCadetes();
                 ActualizarPedidos();
@@ -177,7 +178,7 @@ namespace TP5.Models
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Ha ocurrido un error: " + ex.Message);
+                Console.WriteLine("Ha ocurrido un error (BorrarCadete): " + ex.Message);
                 return false;
             }
         }
@@ -238,6 +239,8 @@ namespace TP5.Models
             {
                 IngresarPedido(pedido);
             }
+
+            PedidoVList = ObtenerViewPedidos();
         }
 
         static public void AsignarPedidoACadete(int idPedido, int idCadete)

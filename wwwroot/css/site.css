@@ -18,35 +18,44 @@ body {
 }
 
 table{
-  border-collapse: collapse;
+  background-color: rgb(0, 153, 255);
+  box-shadow: gray 0px 0px 5px;
+  border-radius: 0.8em;
+  overflow: hidden;
+  border: 1px rgb(0, 153, 255) solid;
 }
 
 table th{
-  background-color: steelblue;
+  background-color: rgb(0, 153, 255);
   color: white;
   text-align: center;
-  padding: 0.5em;
-  border: 1px black solid;
+  padding: 0.8em 2em;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 table td{
-  border: 1px gray solid;
+  padding: 10px 10px;
+}
+
+table tr{
+  background-color: white;
   text-align: center;
-  padding: 0.8em;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-table tr:nth-child(even){
-  background-color: rgb(226, 226, 226);
+table tr:nth-child(even) {
+    background-color: rgb(223, 223, 223);
 }
 
-.cadetes a, .pedidos a{
-  text-decoration: none;
-  color: white;
-  font-size: small;
-  padding: 0.5em;
-  margin: 0.5em;
-  border-radius: 10px;
-  display: inline-block;
+.cadetes a, .pedidos a {
+    text-decoration: none;
+    color: white;
+    font-size: small;
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s;
 }
 
 .cadete-editar, .pedido-estado, .pedido-asignar{
@@ -73,7 +82,7 @@ table tr:nth-child(even){
   background-color: rgb(94, 107, 121);
 }
 
-.pedidos a{
+a{
   text-decoration: none;
 }
 
@@ -84,15 +93,20 @@ table tr:nth-child(even){
   margin: 0;
 }
 
-.cadete-crear a, .pedido-crear a{
-  text-decoration: none;
-  display: block;
-  padding: 0.1em 0.5em;
-  color: white;
-  font-size: 20px;
-  background-color: rgb(40, 199, 40);
-  text-align: center;
-  border-radius: 10px;
+.cadete-crear a, .pedido-crear a {
+    text-decoration: none;
+    display: block;
+    padding: 0.1em 0.5em;
+    color: white;
+    font-size: 20px;
+    background-color: rgb(40, 199, 40);
+    text-align: center;
+    border-radius: 10px;
+    transition: box-shadow 0.5s;
+}
+
+.cadete-crear a:hover, .pedido-crear a:hover {
+    box-shadow: rgb(40, 199, 40) 0px 0px 10px;
 }
 
 .cadete-crear, .pedido-crear{
@@ -133,4 +147,22 @@ form{
 .crear-cadete h2, .crear-pedido h2{
   text-align: center;
   margin: 1em 0;
+}
+
+.restaurar-datos {
+    text-decoration: none;
+    padding: 0.5em;
+    background-color: rgb(113, 44, 249);
+    color: white;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    font-size: 15px;
+    margin: 20px 0;
+    display: block;
+    width: fit-content;
+}
+
+.restaurar-datos:hover {
+    background-color: #5421b9;
+    color: white;
 }

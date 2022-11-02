@@ -27,16 +27,16 @@ namespace TP5.ViewModels
     public class CrearCadeteViewModel
     {
         [Required]
-        [DisplayName("Nombre:")]
+        [DisplayName("Nombre")]
         public string Nombre { get; set; }
 
         [Required]
-        [DisplayName("Teléfono:")]
+        [DisplayName("Teléfono")]
         public long Tel { get; set; }
 
         [Required]
         [StringLength(80)]
-        [DisplayName("Dirección:")]
+        [DisplayName("Dirección")]
         public string Direccion { get; set; }
     }
 
@@ -47,16 +47,16 @@ namespace TP5.ViewModels
         public int ID { get; set; }
 
         [Required]
-        [DisplayName("Nombre:")]
+        [DisplayName("Nombre")]
         public string Nombre { get; set; }
 
         [Required]
-        [DisplayName("Teléfono:")]
+        [DisplayName("Teléfono")]
         public long Tel { get; set; }
 
         [Required]
         [StringLength(80)]
-        [DisplayName("Dirección:")]
+        [DisplayName("Dirección")]
         public string Direccion { get; set; }
 
         public EditarCadeteViewModel()
