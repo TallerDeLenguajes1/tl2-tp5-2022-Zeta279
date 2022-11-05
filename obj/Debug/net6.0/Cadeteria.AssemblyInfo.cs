@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TP5")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Cadeteria")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("TP5")]
-[assembly: System.Reflection.AssemblyTitleAttribute("TP5")]
+[assembly: System.Reflection.AssemblyProductAttribute("Cadeteria")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Cadeteria")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Generado por la clase WriteCodeFragment de MSBuild.

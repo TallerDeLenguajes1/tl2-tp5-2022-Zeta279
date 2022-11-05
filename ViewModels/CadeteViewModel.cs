@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace TP5.ViewModels
+namespace Cadeteria.ViewModels
 {
     public class CadeteViewModel
     {

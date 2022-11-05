@@ -1,6 +1,6 @@
-﻿using TP5.ViewModels;
+﻿using Cadeteria.ViewModels;
 
-namespace TP5.Models
+namespace Cadeteria.Models
 {
     public class DataModel
     {

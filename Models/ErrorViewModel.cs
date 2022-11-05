@@ -1,4 +1,4 @@
-namespace TP5.Models
+namespace Cadeteria.Models
 {
     public class ErrorViewModel
     {
