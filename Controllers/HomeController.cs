@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cadeteria.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using TP5.Models;
 
-namespace TP5.Controllers
+namespace Cadeteria.Controllers
 {
     public class HomeController : Controller
     {
@@ -21,13 +21,6 @@ namespace TP5.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        public IActionResult Restaurar()
-        {
-            DataModel.RestaurarDatos();
-
-            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

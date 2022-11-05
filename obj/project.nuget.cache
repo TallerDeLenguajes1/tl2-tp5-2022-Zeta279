@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "kk7AYqvixEbWHOHcN1CW6GLmcsvO5xQCZyZIpt8waedwBMt9BdMfwtMK43RJ49/5HJfikOiYE5Chef5FZC7SNg==",
+  "dgSpecHash": "6ZCzaNC0G2QRnStV3eQ0UBfKdPGvAcA6MIYfWmpJZht4jvjK0pUNwh6FKHoGb+gDMN/6NXP1XZB0jCHBFA5T4Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\USUARIO\\Desktop\\Facultad\\Taller de lenguajes II\\TP\\TP5\\TP5.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\USUARIO\\Desktop\\Facultad\\Taller de lenguajes II\\TP\\Cadeteria\\Cadeteria.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\USUARIO\\.nuget\\packages\\microsoft.data.sqlite.core\\6.0.10\\microsoft.data.sqlite.core.6.0.10.nupkg.sha512",
+    "C:\\Users\\USUARIO\\.nuget\\packages\\sqlitepclraw.core\\2.0.6\\sqlitepclraw.core.2.0.6.nupkg.sha512",
+    "C:\\Users\\USUARIO\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
   "logs": []
 }

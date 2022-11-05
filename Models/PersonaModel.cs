@@ -1,13 +1,13 @@
-﻿namespace TP5.Models
+﻿namespace Cadeteria.Models
 {
     public class PersonaModel
     {
         public int id { get; }
         public string nombre { get; }
         public string direccion { get; }
-        public long telefono { get; }
+        public string telefono { get; }
 
-        public PersonaModel(int id, string nombre, string direccion, long telefono)
+        public PersonaModel(int id, string nombre, string direccion, string telefono)
         {
             this.id = id;
             this.nombre = nombre;

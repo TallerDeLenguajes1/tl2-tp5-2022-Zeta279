@@ -1,53 +1,58 @@
-﻿namespace TP5.Models
+﻿namespace Cadeteria.Models
 {
+    public enum estado
+    {
+        SinAsignar,
+        Pendiente,
+        EnCurso,
+        Entregado
+    }
+
     public class PedidoModel
     {
         public int Nro { get; }
         public string Detalles { get; }
         public ClienteModel cliente { get; }
-        public CadeteModel Cadete { get; private set; }
-        private bool EnCurso;
-        private bool Entregado;
+        public estado Estado { get; private set; }
+        private bool CadeteBorrado;
 
-        public PedidoModel(int nro, string det, int id, string nom, string direc, long tel, string datos)
+        public PedidoModel(int nro, string det, int id, string nom, string direc, string tel)
         {
             Nro = nro;
             Detalles = det;
-            cliente = new ClienteModel(id, nom, direc, tel, datos);
-            EnCurso = false;
-            Entregado = false;
+            cliente = new ClienteModel(id, nom, direc, tel);
+            Estado = estado.SinAsignar;
+            CadeteBorrado = false;
         }
 
-        public void IniciarPedido(CadeteModel cadete)
+        public void IniciarPedido()
         {
-            EnCurso = true;
-            Cadete = cadete;
+            Estado = estado.EnCurso;
         }
 
-        public void BorrarCadete()
+        public void AsignarCadete()
         {
-            Cadete = null;
+            Estado = estado.Pendiente;
         }
 
         public void EntregarPedido()
         {
-            EnCurso = false;
-            Entregado = true;
-        }
-
-        public void AsignarCadete(CadeteModel cadete)
-        {
-            Cadete = cadete;
+            Estado = estado.Entregado;
         }
 
         public bool FueEntregado()
         {
-            return Entregado;
+            return Estado == estado.Entregado;
         }
 
         public bool EstaEnCurso()
         {
-            return EnCurso;
+            return Estado == estado.EnCurso;
+        }
+
+        public void BorrarCadete()
+        {
+            CadeteBorrado = true;
         }
 
         public override string ToString()
@@ -56,25 +61,6 @@
             if (EnCurso) curso = "Si";
             else curso = "No";
             return $"Número: {Nro}\nDetalles: {Detalles}\nEn curso: {curso}\nCliente: \n{cliente}";
-        }
-
-        public string PasarACSV()
-        {
-            int auxA = 0, auxB = 0, cadID;
-
-            if (EnCurso) auxA = 1;
-
-            if (Entregado) auxB = 1;
-
-            if (!EnCurso && !Entregado) cadID = 0;
-            else if(Entregado && Cadete is not null)
-            {
-                cadID = -1;
-            }
-
-            else cadID = Cadete.id;
-
-            return $"{Nro};{Detalles};{cliente.id};{cliente.nombre};{cliente.direccion};{cliente.telefono};{cliente.DatosRef};{cadID};{auxA};{auxB}\n";
         }
     }
 }

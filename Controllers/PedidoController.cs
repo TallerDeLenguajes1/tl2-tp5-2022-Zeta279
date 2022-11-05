@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TP5.Models;
-using TP5.ViewModels;
+using Cadeteria.Models;
+using Cadeteria.ViewModels;
 
-namespace TP5.Controllers
+namespace Cadeteria.Controllers
 {
     public class PedidoController : Controller
     {

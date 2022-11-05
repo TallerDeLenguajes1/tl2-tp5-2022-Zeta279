@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using TP5.Models;
+using Cadeteria.Models;
 
-namespace TP5.ViewModels
+namespace Cadeteria.ViewModels
 {
     public class PedidoViewModel
     {

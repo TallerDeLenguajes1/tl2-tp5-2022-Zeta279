@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TP5", "TP5.csproj", "{6D8BE05F-D94A-4ED0-9743-C79B7BB1436F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cadeteria", "Cadeteria.csproj", "{E8D1FA54-ED89-41E5-AF3E-A123BD332B88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6D8BE05F-D94A-4ED0-9743-C79B7BB1436F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D8BE05F-D94A-4ED0-9743-C79B7BB1436F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D8BE05F-D94A-4ED0-9743-C79B7BB1436F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D8BE05F-D94A-4ED0-9743-C79B7BB1436F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8D1FA54-ED89-41E5-AF3E-A123BD332B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D1FA54-ED89-41E5-AF3E-A123BD332B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D1FA54-ED89-41E5-AF3E-A123BD332B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D1FA54-ED89-41E5-AF3E-A123BD332B88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {32E0CD59-9A49-461D-A201-C9F2C3BB88D7}
+		SolutionGuid = {56A717ED-77CB-4FE2-80E8-742EF610EBAA}
 	EndGlobalSection
 EndGlobal
