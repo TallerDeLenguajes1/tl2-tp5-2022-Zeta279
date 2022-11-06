@@ -29,6 +29,7 @@ CREATE TABLE pedido
 (
 	id_pedido INT,
 	observacion TEXT,
+	estado TEXT,
 	id_cliente INT NOT NULL,
 	id_cadete INT,
 	CONSTRAINT pk_pedido PRIMARY KEY (id_pedido), 

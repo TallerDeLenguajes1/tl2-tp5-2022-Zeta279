@@ -70,23 +70,18 @@ namespace Cadeteria.ViewModels
         [DisplayName("Teléfono")]
         public long TelefonoCliente { get; set; }
 
-        [AllowNull]
-        [DisplayName("Datos de referencia")]
-        public string DatosRefCliente { get; set; }
-
         public CrearPedidoViewModel()
         {
 
         }
 
-        public CrearPedidoViewModel(string detalles, int iDCliente, string nombreCliente, string direccionCliente, long telefonoCliente, string datosRefCliente)
+        public CrearPedidoViewModel(string detalles, int iDCliente, string nombreCliente, string direccionCliente, long telefonoCliente)
         {
             Detalles = detalles;
             IDCliente = iDCliente;
             NombreCliente = nombreCliente;
             DireccionCliente = direccionCliente;
             TelefonoCliente = telefonoCliente;
-            DatosRefCliente = datosRefCliente;
         }
     }
 }

@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "6ZCzaNC0G2QRnStV3eQ0UBfKdPGvAcA6MIYfWmpJZht4jvjK0pUNwh6FKHoGb+gDMN/6NXP1XZB0jCHBFA5T4Q==",
+  "dgSpecHash": "vkjfPHil5NCb66YqnzXeljk5NcaJc+A+sz1JkxpVgiKVvagZU2uQKBi509TvNJ/tYoOhwAustTaLeCIvXxch8w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\USUARIO\\Desktop\\Facultad\\Taller de lenguajes II\\TP\\Cadeteria\\Cadeteria.csproj",
+  "projectFilePath": "C:\\Users\\USUARIO\\Desktop\\Facultad\\Taller de lenguajes II\\TP\\TP5\\Cadeteria.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\USUARIO\\.nuget\\packages\\microsoft.data.sqlite\\6.0.10\\microsoft.data.sqlite.6.0.10.nupkg.sha512",
     "C:\\Users\\USUARIO\\.nuget\\packages\\microsoft.data.sqlite.core\\6.0.10\\microsoft.data.sqlite.core.6.0.10.nupkg.sha512",
-    "C:\\Users\\USUARIO\\.nuget\\packages\\sqlitepclraw.core\\2.0.6\\sqlitepclraw.core.2.0.6.nupkg.sha512",
+    "C:\\Users\\USUARIO\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.2\\sqlitepclraw.bundle_e_sqlite3.2.1.2.nupkg.sha512",
+    "C:\\Users\\USUARIO\\.nuget\\packages\\sqlitepclraw.core\\2.1.2\\sqlitepclraw.core.2.1.2.nupkg.sha512",
+    "C:\\Users\\USUARIO\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.2\\sqlitepclraw.lib.e_sqlite3.2.1.2.nupkg.sha512",
+    "C:\\Users\\USUARIO\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.2\\sqlitepclraw.provider.e_sqlite3.2.1.2.nupkg.sha512",
     "C:\\Users\\USUARIO\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
   ],
   "logs": []

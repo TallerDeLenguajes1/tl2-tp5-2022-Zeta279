@@ -25,14 +25,14 @@
             CadeteBorrado = false;
         }
 
-        public void IniciarPedido()
-        {
-            Estado = estado.EnCurso;
-        }
-
         public void AsignarCadete()
         {
             Estado = estado.Pendiente;
+        }
+
+        public void IniciarPedido()
+        {
+            Estado = estado.EnCurso;
         }
 
         public void EntregarPedido()
@@ -58,7 +58,7 @@
         public override string ToString()
         {
             string curso;
-            if (EnCurso) curso = "Si";
+            if (Estado == estado.EnCurso) curso = "Si";
             else curso = "No";
             return $"Número: {Nro}\nDetalles: {Detalles}\nEn curso: {curso}\nCliente: \n{cliente}";
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Cadeteria.Models;
 using Cadeteria.ViewModels;
+using Microsoft.Data.Sqlite;
 
 namespace Cadeteria.Controllers
 {
@@ -31,7 +32,7 @@ namespace Cadeteria.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataModel.IngresarCadete(cadete.Nombre, cadete.Direccion, cadete.Tel);
+                DataModel.IngresarCadete(cadete.Nombre, cadete.Direccion, cadete.Tel.ToString());
                 return RedirectToAction("Index");
             }
             else
@@ -46,7 +47,7 @@ namespace Cadeteria.Controllers
             if (DataModel.CadeteList.ContainsKey(id))
             {
                 var cadete = DataModel.CadeteList[id];
-                return View(new EditarCadeteViewModel(id, cadete.nombre, cadete.telefono, cadete.direccion));
+                return View(new EditarCadeteViewModel(id, cadete.nombre, long.Parse(cadete.telefono), cadete.direccion));
             }
             return RedirectToAction("Error", new {error = "No se ha encontrado el cadete solicitado"});
         }
@@ -58,7 +59,7 @@ namespace Cadeteria.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataModel.ActualizarCadete(cadete.ID, cadete.Nombre, cadete.Direccion, cadete.Tel);
+                DataModel.ActualizarCadete(cadete.ID, cadete.Nombre, cadete.Direccion, cadete.Tel.ToString());
                 return RedirectToAction("Index");
             }
             else

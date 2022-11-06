@@ -22,7 +22,7 @@ namespace Cadeteria.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente, pedido.DatosRefCliente);
+                DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente.ToString());
                 return RedirectToAction("Index");
             }
             else
@@ -57,6 +57,7 @@ namespace Cadeteria.Controllers
         {
             if (DataModel.PedidoList.ContainsKey(id))
             {
+                if (DataModel.PedidoList[id].Estado == estado.Pendiente) DataModel.IniciarPedido(id);
                 DataModel.EntregarPedido(id);
                 return RedirectToAction("Index");
             }
