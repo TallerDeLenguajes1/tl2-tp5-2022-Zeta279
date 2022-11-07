@@ -9,42 +9,27 @@ namespace Cadeteria.ViewModels
     {
         public int NumPedido { get; set; }
         public string Detalles { get; set; }
-        public CadeteViewModel Cadete { get; set; }
         public ClienteModel Cliente { get; set; }
-        public bool EnCurso { get; set; }
-        public bool Entregado { get; set; }
+        public string NombreCadete {get; set;}
+        public estado Estado { get; set; }
 
         public PedidoViewModel()
         {
 
         }
 
-        public PedidoViewModel(int num, string detalles, CadeteViewModel cadete, bool enCurso, bool entregado)
+        public PedidoViewModel(int num, string detalles, ClienteModel cliente, estado estado)
         {
             NumPedido = num;
             Detalles = detalles;
-            Cadete = cadete;
-            EnCurso = enCurso;
-            Entregado = entregado;
+            Cliente = cliente;
+            Estado = estado;
+            NombreCadete = null;
         }
 
-        public PedidoViewModel(int num, string detalles, CadeteViewModel cadete, ClienteModel cliente, bool enCurso, bool entregado)
+        public void IngresarCadete(string nombre)
         {
-            NumPedido = num;
-            Detalles = detalles;
-            Cadete = cadete;
-            Cliente = cliente;
-            EnCurso = enCurso;
-            Entregado = entregado;
-        }
-
-        public PedidoViewModel(string detalles, CadeteViewModel cadete, ClienteModel cliente)
-        {
-            Detalles = detalles;
-            Cadete = cadete;
-            Cliente = cliente;
-            EnCurso = false;
-            Entregado = false;
+            NombreCadete = nombre;
         }
     }
 

@@ -9,67 +9,64 @@
 </section>
 
 <section class="pedidos">
-    <table>
-        <thead>
+    @if(Model.Count > 0)
+    {
+        <table>
+            <thead>
             <th>Detalles</th>
             <th>Estado</th>
             <th>Cadete</th>
             <th>Acciones</th>
-        </thead>
-        <tbody>
-            @foreach(var pedido in Model)
-            {
-                <tr>
-                    <td>@pedido.Detalles</td>
-                    @if (pedido.Entregado)
-                    {
-                        <td>Entregado</td>
-                        @if(pedido.Cadete is null)
+            </thead>
+            <tbody>
+                @foreach (var pedido in Model)
+                {
+                    <tr>
+                        <td>@pedido.Detalles</td>
+                        <td>@pedido.Estado</td>
+                        @if (pedido.Estado == estado.EntregadoBorrado)
                         {
                             <td><i>Borrado</i></td>
                         }
                         else
                         {
-                            <td>@pedido.Cadete.nombre</td>
+                            @if (pedido.NombreCadete == null)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@pedido.NombreCadete</td>
+                            }
                         }
-                    }
-                    else
-                    {
-                        @if (pedido.EnCurso)
-                        {
-                            <td>En curso</td>
-                            <td>@pedido.Cadete.nombre</td>
-                        }
-                        else
-                        {
-                            <td>Pendiente</td>
-                            <td>No asignado</td>
-                        }
-                    }
-                    
-                    <td><section class="table-botones">
-                    @if (!@pedido.Entregado && !@pedido.EnCurso)
-                    {
-                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Asignar</a>
-                        <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Cancelar</a>
-                    }
-                    else
-                    {
-                        @if (@pedido.EnCurso && !@pedido.Entregado)
-                        {
-                            <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.NumPedido" class="pedido-estado">Cambiar estado</a>
-                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Cancelar</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Borrar</a>
-                        }
-                    }
-                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.NumPedido" class="pedido-detalles">Detalles</a>
-                    </section></td>
-                    
-                </tr>
-            }
-        </tbody>
-    </table>
+
+                        <td>
+                            <section class="table-botones">
+                                @if (pedido.Estado == estado.SinAsignar)
+                                {
+                                    <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Asignar</a>
+                                }
+                                @if (pedido.Estado == estado.Pendiente)
+                                {
+                                    <a asp-controller="Pedido" asp-action="Iniciar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Iniciar Pedido</a>
+                                }
+                                @if (pedido.Estado == estado.EnCurso)
+                                {
+                                    <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.NumPedido" class="pedido-estado">Entregar</a>
+                                }
+                                <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Borrar</a>
+                                <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.NumPedido" class="pedido-detalles">Detalles</a>
+                            </section>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3>No existe ningún pedido</h3>
+    }
+    
 </section>

@@ -9,13 +9,13 @@ namespace Cadeteria.ViewModels
         public int CadeteId { get; set; }
         public string nombre { get; set; }
         public string direccion { get; set; }
-        public long telefono { get; set; }
+        public string telefono { get; set; }
 
         public CadeteViewModel()
         {
 
         }
-        public CadeteViewModel(int id, string nombre, string direccion, long telefono)
+        public CadeteViewModel(int id, string nombre, string direccion, string telefono)
         {
             this.CadeteId = id;
             this.nombre = nombre;

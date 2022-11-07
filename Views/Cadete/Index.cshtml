@@ -9,23 +9,31 @@
     <a asp-controller="Cadete" asp-action="Create">+</a>
 </section>
 <section class="cadetes">
-    <table>
-        <thead>
-        <th>Nombre</th>
-        <th>Dirección</th>
-        <th>Teléfono</th>
-        <th>Acciones</th>
-        </thead>
-        <tbody>
-            @foreach (var cadete in Model)
-            {
-                <tr>
-                    <td>@cadete.nombre</td>
-                    <td>@cadete.direccion</td>
-                    <td>@cadete.telefono</td>
-                    <td><section class="table-botones"><a href="/Cadete/Edit/@cadete.CadeteId" class="cadete-editar">Editar</a><a href="/Cadete/Delete/@cadete.CadeteId" class="cadete-borrar">Borrar</a></section></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @if (Model.Count > 0)
+    {
+        <table>
+            <thead>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+            </thead>
+            <tbody>
+                @foreach (var cadete in Model)
+                {
+                    <tr>
+                        <td>@cadete.nombre</td>
+                        <td>@cadete.direccion</td>
+                        <td>@cadete.telefono</td>
+                        <td><section class="table-botones"><a href="/Cadete/Edit/@cadete.CadeteId" class="cadete-editar">Editar</a><a href="/Cadete/Delete/@cadete.CadeteId" class="cadete-borrar">Borrar</a></section></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3>No existe ningún cadete</h3>
+    }
+    
 </section>

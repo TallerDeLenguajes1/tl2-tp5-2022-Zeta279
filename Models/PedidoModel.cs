@@ -5,7 +5,8 @@
         SinAsignar,
         Pendiente,
         EnCurso,
-        Entregado
+        Entregado,
+        EntregadoBorrado
     }
 
     public class PedidoModel
@@ -52,7 +53,7 @@
 
         public void BorrarCadete()
         {
-            CadeteBorrado = true;
+            if (FueEntregado()) Estado = estado.EntregadoBorrado;
         }
 
         public override string ToString()
