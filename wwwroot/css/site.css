@@ -47,7 +47,7 @@ table tr:nth-child(even) {
     background-color: rgb(223, 223, 223);
 }
 
-.cadetes a, .pedidos a {
+.cadetes a, .pedidos a , .clientes a{
     text-decoration: none;
     color: white;
     font-size: small;
@@ -58,23 +58,23 @@ table tr:nth-child(even) {
     transition: background-color 0.3s;
 }
 
-.cadete-editar, .pedido-estado, .pedido-asignar{
+.cadete-editar, .pedido-estado, .pedido-asignar, .cliente-editar{
   background-color: rgb(47, 148, 47);
 }
 
-.cadete-editar:hover, .pedido-estado:hover, .pedido-asignar:hover{
-  background-color: rgb(39, 121, 39);
+.cadete-editar:hover, .pedido-estado:hover, .pedido-asignar:hover, .cliente-editar:hover{
+    background-color: rgb(39, 121, 39);
 }
 
-.cadete-borrar, .pedido-borrar{
+.cadete-borrar, .pedido-borrar, .cliente-borrar{
   background-color: rgb(212, 54, 54);
 }
 
-.cadete-borrar:hover, .pedido-borrar:hover{
+.cadete-borrar:hover, .pedido-borrar:hover, .cliente-borrar:hover{
   background-color: rgb(173, 44, 44);
 }
 
-.cadete-detalles, .pedido-detalles{
+.pedido-detalles{
   background-color: slategray;
 }
 
@@ -93,7 +93,7 @@ a{
   margin: 0;
 }
 
-.cadete-crear a, .pedido-crear a {
+.cadete-crear a, .pedido-crear a, .cliente-crear a {
     text-decoration: none;
     display: block;
     padding: 0.1em 0.5em;
@@ -105,11 +105,11 @@ a{
     transition: box-shadow 0.5s;
 }
 
-.cadete-crear a:hover, .pedido-crear a:hover {
+.cadete-crear a:hover, .pedido-crear a:hover, .cliente-crear:hover{
     box-shadow: rgb(40, 199, 40) 0px 0px 10px;
 }
 
-.cadete-crear, .pedido-crear{
+.cadete-crear, .pedido-crear, .cliente-crear{
   display: inline-block;
   margin: 1em 0;
 }
@@ -144,7 +144,7 @@ form{
   width: fit-content;
 }
 
-.crear-cadete h2, .crear-pedido h2{
+.crear-cadete h2, .crear-pedido h2, .crear-cliente h2{
   text-align: center;
   margin: 1em 0;
 }

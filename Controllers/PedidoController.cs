@@ -22,7 +22,7 @@ namespace Cadeteria.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente.ToString());
+                DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente);
                 return RedirectToAction("Index");
             }
             else

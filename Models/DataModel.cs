@@ -8,9 +8,11 @@ namespace Cadeteria.Models
     {
         static public Dictionary<int, CadeteModel> CadeteList;
         static public Dictionary<int, PedidoModel> PedidoList;
+        static public Dictionary<int, ClienteModel> ClienteList;
         static private Dictionary<int, int> PedidosConCadetes;
         static public List<CadeteViewModel> CadeteVList;
         static public List<PedidoViewModel> PedidoVList;
+        static public List<ClienteViewModel> ClienteVList;
         static private string ConnectionString;
 
         static DataModel()
@@ -18,6 +20,7 @@ namespace Cadeteria.Models
             ConnectionString = $"Data Source=database/cadeteria.db";
             PedidosConCadetes = new();
             ActualizarCadetes();
+            ActualizarClientes();
             ActualizarPedidos();
         }
 
@@ -32,6 +35,35 @@ namespace Cadeteria.Models
             try
             {
                 SqliteCommand comando = new SqliteCommand("SELECT MAX(cadete.id_cadete) FROM cadete;", conexion);
+                var reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (!reader.IsDBNull(0))
+                {
+                    id = reader.GetInt32(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (DataModel): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return id;
+        }
+
+        static private int ObtenerIDCliente()
+        {
+            int id = 0;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+
+            conexion.Open();
+
+            try
+            {
+                SqliteCommand comando = new SqliteCommand("SELECT MAX(id_cliente) FROM cliente;", conexion);
                 var reader = comando.ExecuteReader();
                 reader.Read();
 
@@ -102,6 +134,18 @@ namespace Cadeteria.Models
                 {
                     lista[lista.Count - 1].IngresarCadete(CadeteList[PedidosConCadetes[pedido.Nro]].nombre);
                 }
+            }
+
+            return lista;
+        }
+
+        static private List<ClienteViewModel> ObtenerViewClientes()
+        {
+            List<ClienteViewModel> lista = new();
+
+            foreach(var cliente in ClienteList.Values)
+            {
+                lista.Add(new ClienteViewModel(cliente.id, cliente.nombre, cliente.direccion, cliente.telefono));
             }
 
             return lista;
@@ -193,6 +237,37 @@ namespace Cadeteria.Models
             return pedidos;
         }
 
+        static public Dictionary<int, ClienteModel> ObtenerClientes()
+        {
+            Dictionary<int, ClienteModel> lista = new();
+
+            SqliteConnection conexion = new(ConnectionString);
+            SqliteCommand comando = new();
+            SqliteDataReader reader;
+
+            conexion.Open();
+
+            try
+            {
+                comando.Connection = conexion;
+                comando.CommandText = "SELECT *  FROM cliente;";
+                reader = comando.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    lista.Add(reader.GetInt32(0), new ClienteModel(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (ObtenerClientes): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return lista;
+        }
+
         static public bool IngresarCadete(string nom, string direc, string tel)
         {
             int resultado = 0;
@@ -225,7 +300,7 @@ namespace Cadeteria.Models
             return resultado > 0;
         }
 
-        static public bool IngresarPedido(string det, int idc, string nomc, string direc, string tel)
+        static public bool IngresarPedido(string det, int idc)
         {
             int resultado = 0;
 
@@ -237,43 +312,8 @@ namespace Cadeteria.Models
 
             try
             {
-                // Obtener ID de cliente
-                /*
-                comando.CommandText = "SELECT MAX(id_cliente) FROM cliente";
-                comando.Connection = conexion;
-                reader = comando.ExecuteReader();
-                reader.Read();
-
-                idc = 1;
-                if (!reader.IsDBNull(0))
-                {
-                    idc = reader.GetInt32(0) + 1;
-                }
-                reader.Close();
-                */
-
-                // Ingresar el cliente en caso de no existir
-                comando.CommandText = "SELECT * FROM cliente WHERE id_cliente = $id";
-                comando.Connection = conexion;
-                comando.Parameters.AddWithValue("$id", idc);
-                reader = comando.ExecuteReader();
-
-                if (!reader.HasRows)
-                {
-                    reader.Close();
-                    comando.Parameters.Clear();
-                    comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel)";
-                    comando.Parameters.AddWithValue("$id", idc);
-                    comando.Parameters.AddWithValue("$nom", nomc);
-                    comando.Parameters.AddWithValue("$direc", direc);
-                    comando.Parameters.AddWithValue("$tel", tel);
-                    comando.ExecuteNonQuery();
-                }
-                reader.Close();
-
-                // Ingresar pedido
-                comando.Parameters.Clear();
                 comando.CommandText = "INSERT INTO pedido VALUES ($id, $det, 'SinAsignar', $id_c, null)";
+                comando.Connection = conexion;
                 comando.Parameters.AddWithValue("$id", ObtenerIDPedido() + 1);
                 comando.Parameters.AddWithValue("$det", det);
                 comando.Parameters.AddWithValue("$id_c", idc);
@@ -284,6 +324,38 @@ namespace Cadeteria.Models
             catch (Exception ex)
             {
                 Console.WriteLine("Ha ocurrido un error (IngresarPedido): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
+        }
+
+        static public bool IngresarCliente(int id, string nom, string direc, string tel)
+        {
+            int resultado = 0;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+
+            conexion.Open();
+
+            try
+            {
+                SqliteCommand comando = new SqliteCommand();
+                comando.Connection = conexion;
+                comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel);";
+                comando.Parameters.AddWithValue("$id", ObtenerIDCliente() + 1);
+                comando.Parameters.AddWithValue("$nom", nom);
+                comando.Parameters.AddWithValue("$direc", direc);
+                comando.Parameters.AddWithValue("$tel", tel);
+
+                resultado = comando.ExecuteNonQuery();
+
+                if (resultado > 0) ActualizarClientes();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (IngresarCliente): " + ex.Message);
             }
 
             conexion.Close();
@@ -314,6 +386,36 @@ namespace Cadeteria.Models
             catch(Exception ex)
             {
                 Console.WriteLine("Ha ocurrido un error (ActualizarCadete): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
+        }
+
+        static public bool ActualizarCliente(int id, string nom, string direc, string tel)
+        {
+            int resultado = 0;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            SqliteCommand comando = new();
+            conexion.Open();
+
+            try
+            {
+                comando.CommandText = "UPDATE cliente SET nombre = $nom, direccion = $direc, telefono = $tel WHERE id_cliente = $id";
+                comando.Connection = conexion;
+                comando.Parameters.AddWithValue("$nom", nom);
+                comando.Parameters.AddWithValue("$direc", direc);
+                comando.Parameters.AddWithValue("$tel", tel);
+                comando.Parameters.AddWithValue("$id", id);
+                resultado = comando.ExecuteNonQuery();
+
+                if (resultado > 0) ActualizarClientes();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (ActualizarCliente): " + ex.Message);
             }
 
             conexion.Close();
@@ -354,6 +456,41 @@ namespace Cadeteria.Models
             catch (Exception ex)
             {
                 Console.WriteLine("Ha ocurrido un error (BorrarCadete): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
+        }
+
+        static public bool BorrarCliente(int id)
+        {
+            int resultado = 0;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            SqliteCommand comando = new();
+
+            conexion.Open();
+
+            try
+            {
+                comando.CommandText = "DELETE FROM pedido WHERE id_cliente = $id";
+                comando.Connection = conexion;
+                comando.Parameters.AddWithValue("$id", id);
+                comando.ExecuteNonQuery();
+
+                ActualizarPedidos();
+
+                comando.Parameters.Clear();
+                comando.CommandText = "DELETE FROM cliente WHERE id_cliente = $id;";
+                comando.Parameters.AddWithValue("$id", id);
+                resultado = comando.ExecuteNonQuery();
+
+                if (resultado > 0) ActualizarClientes();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (BorrarCliente): " + ex.Message);
             }
 
             conexion.Close();
@@ -406,6 +543,7 @@ namespace Cadeteria.Models
                 conexion.Close();
 
                 ActualizarCadetes();
+                ActualizarClientes();
                 ActualizarPedidos();
             }
             catch(Exception ex)
@@ -419,6 +557,12 @@ namespace Cadeteria.Models
         {
             PedidoList = ObtenerPedidos();
             PedidoVList = ObtenerViewPedidos();
+        }
+
+        static private void ActualizarClientes()
+        {
+            ClienteList = ObtenerClientes();
+            ClienteVList = ObtenerViewClientes();
         }
 
         static public void AsignarPedidoACadete(int idPedido, int idCadete)

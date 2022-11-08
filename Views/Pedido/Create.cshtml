@@ -11,18 +11,20 @@
         <label asp-for="@Model.Detalles"></label>
         <input asp-for="@Model.Detalles">
 
-        <h5>Datos del cliente</h5>
-        <label asp-for="@Model.IDCliente"></label>
-        <input asp-for="@Model.IDCliente">
-
-        <label asp-for="@Model.NombreCliente"></label>
-        <input asp-for="@Model.NombreCliente">
-
-        <label asp-for="@Model.DireccionCliente"></label>
-        <input asp-for="@Model.DireccionCliente">
-
-        <label asp-for="@Model.TelefonoCliente"></label>
-        <input asp-for="@Model.TelefonoCliente">
+        <h5>Seleccionar cliente</h5>
+        @if(DataModel.ClienteList.Count > 0)
+        {
+            <select asp-for="@Model.IDCliente">
+                @foreach (var cliente in DataModel.ClienteList)
+                {
+                    <option value="@cliente.Key">@cliente.Value.nombre</option>
+                }
+            </select>
+        }
+        else
+        {
+            <p>No hay ningún cliente</p>
+        }
         <button>Ingresar</button>
     </form>
 </section>
