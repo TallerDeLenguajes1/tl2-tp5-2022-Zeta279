@@ -23,21 +23,14 @@
                 {
                     <tr>
                         <td>@pedido.Detalles</td>
-                        <td>@pedido.Estado</td>
-                        @if (pedido.Estado == estado.EntregadoBorrado)
+                        <td>@pedido.ObtenerEstado()</td>
+                        @if (pedido.NombreCadete == null)
                         {
-                            <td><i>Borrado</i></td>
+                            <td>-</td>
                         }
                         else
                         {
-                            @if (pedido.NombreCadete == null)
-                            {
-                                <td>-</td>
-                            }
-                            else
-                            {
-                                <td>@pedido.NombreCadete</td>
-                            }
+                            <td>@pedido.NombreCadete</td>
                         }
 
                         <td>

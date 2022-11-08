@@ -5,8 +5,7 @@
         SinAsignar,
         Pendiente,
         EnCurso,
-        Entregado,
-        EntregadoBorrado
+        Entregado
     }
 
     public class PedidoModel
@@ -15,7 +14,6 @@
         public string Detalles { get; }
         public ClienteModel cliente { get; }
         public estado Estado { get; private set; }
-        private bool CadeteBorrado;
 
         public PedidoModel(int nro, string det, int id, string nom, string direc, string tel)
         {
@@ -23,7 +21,6 @@
             Detalles = det;
             cliente = new ClienteModel(id, nom, direc, tel);
             Estado = estado.SinAsignar;
-            CadeteBorrado = false;
         }
 
         public void AsignarCadete()
@@ -49,11 +46,6 @@
         public bool EstaEnCurso()
         {
             return Estado == estado.EnCurso;
-        }
-
-        public void BorrarCadete()
-        {
-            if (FueEntregado()) Estado = estado.EntregadoBorrado;
         }
 
         public override string ToString()

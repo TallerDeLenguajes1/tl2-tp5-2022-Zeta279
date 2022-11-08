@@ -1,0 +1,13 @@
+DELETE FROM pedido;
+DELETE FROM cadete;
+DELETE FROM cliente;
+
+INSERT INTO cadete VALUES(1, "Ezequiel", "America 2402", "3812732942", 1);
+INSERT INTO cadete VALUES(2, "Martin Avellaneda", "25 de Mayo 840", "3816950293", 1);
+INSERT INTO cadete VALUES(3, "Marcos Rodriguez", "25 de Mayo 125", "3814720341", 1);
+
+INSERT INTO cliente VALUES(1, "Martin", "Colombia 122", "3815692839");
+INSERT INTO cliente VALUES(2, "Jorge Gutierrez", "Aguirrez 123", "3812034012");
+
+INSERT INTO pedido VALUES(1, "Det 1", "SinAsignar", 1, null);
+INSERT INTO pedido VALUES(2, "Det 2", "SinAsignar", 2, null);

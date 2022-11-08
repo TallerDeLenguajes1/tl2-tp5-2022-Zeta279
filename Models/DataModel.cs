@@ -12,38 +12,32 @@ namespace Cadeteria.Models
         static public List<CadeteViewModel> CadeteVList;
         static public List<PedidoViewModel> PedidoVList;
         static private string ConnectionString;
-        static private int IDCadetes;
-        static private int IDPedidos;
 
         static DataModel()
         {
             ConnectionString = $"Data Source=database/cadeteria.db";
-            IDCadetes = 0;
-            IDPedidos = 0;
             PedidosConCadetes = new();
-            ObtenerIDs();
             ActualizarCadetes();
             ActualizarPedidos();
         }
 
-        static private void ObtenerIDs()
+        static private int ObtenerIDCadete()
         {
+            int id = 0;
+
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
 
             conexion.Open();
 
             try
             {
-                SqliteCommand comando = new SqliteCommand("SELECT MAX(cadete.id_cadete), MAX(pedido.id_pedido) FROM cadete, pedido;", conexion);
+                SqliteCommand comando = new SqliteCommand("SELECT MAX(cadete.id_cadete) FROM cadete;", conexion);
                 var reader = comando.ExecuteReader();
+                reader.Read();
 
-                IDCadetes = 1;
-                IDPedidos = 1;
-
-                if (reader.Read() && !reader.IsDBNull(0) && !reader.IsDBNull(1))
+                if (!reader.IsDBNull(0))
                 {
-                    IDCadetes = reader.GetInt32(0) + 1;
-                    IDPedidos = reader.GetInt32(1) + 1;
+                    id = reader.GetInt32(0);
                 }
             }
             catch (Exception ex)
@@ -52,6 +46,37 @@ namespace Cadeteria.Models
             }
 
             conexion.Close();
+
+            return id;
+        }
+
+        static private int ObtenerIDPedido()
+        {
+            int id = 0;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+
+            conexion.Open();
+
+            try
+            {
+                SqliteCommand comando = new SqliteCommand("SELECT MAX(pedido.id_pedido) FROM pedido;", conexion);
+                var reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (!reader.IsDBNull(0))
+                {
+                    id = reader.GetInt32(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (DataModel): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return id;
         }
 
         static private List<CadeteViewModel> ObtenerViewCadetes()
@@ -73,7 +98,7 @@ namespace Cadeteria.Models
             foreach(var pedido in PedidoList.Values)
             {
                 lista.Add(new PedidoViewModel(pedido.Nro, pedido.Detalles, pedido.cliente, pedido.Estado));
-                if(pedido.Estado != estado.SinAsignar && pedido.Estado != estado.EntregadoBorrado)
+                if(PedidosConCadetes.ContainsKey(pedido.Nro))
                 {
                     lista[lista.Count - 1].IngresarCadete(CadeteList[PedidosConCadetes[pedido.Nro]].nombre);
                 }
@@ -88,8 +113,6 @@ namespace Cadeteria.Models
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
-
-            if (IDCadetes == 0 || IDPedidos == 0) ObtenerIDs();
 
             try
             {
@@ -120,7 +143,12 @@ namespace Cadeteria.Models
 
             conexion.Open();
 
-            if (IDCadetes == 0 || IDPedidos == 0) ObtenerIDs();
+            foreach(var cadete in CadeteList)
+            {
+                cadete.Value.EliminarPedidos();
+            }
+
+            PedidosConCadetes.Clear();
 
             try
             {
@@ -131,11 +159,15 @@ namespace Cadeteria.Models
                 {
                     id = reader.GetInt32(0);
                     pedidos.Add(id, new PedidoModel(id, reader.GetString(1), reader.GetInt32(3), reader.GetString(5), reader.GetString(6), reader.GetString(7)));
-                    if (reader.GetString(2) != "SinAsignar" && reader.GetString(3) != null)
+
+                    // Asignar pedido al cadete
+                    if (!reader.IsDBNull(4))
                     {
-                        CadeteList[reader.GetInt32(3)].IngresarPedido(pedidos[id]);
-                        PedidosConCadetes[id] = reader.GetInt32(3);
+                        CadeteList[reader.GetInt32(4)].IngresarPedido(pedidos[id]);
+                        PedidosConCadetes[id] = reader.GetInt32(4);
                     }
+
+                    // Asignar estado
                     if (reader.GetString(2) == "Pendiente")
                     {
                         pedidos[id].AsignarCadete();
@@ -174,8 +206,8 @@ namespace Cadeteria.Models
                 SqliteCommand comando = new SqliteCommand();
                 comando.Connection = conexion;
                 comando.CommandText = "INSERT INTO cadete VALUES ($id, $nom, $direc, $tel, 1);";
+                comando.Parameters.AddWithValue("$id", ObtenerIDCadete() + 1);
                 comando.Parameters.AddWithValue("$nom", nom);
-                comando.Parameters.AddWithValue("$id", IDCadetes++);
                 comando.Parameters.AddWithValue("$direc", direc);
                 comando.Parameters.AddWithValue("$tel", tel);
 
@@ -196,16 +228,17 @@ namespace Cadeteria.Models
         static public bool IngresarPedido(string det, int idc, string nomc, string direc, string tel)
         {
             int resultado = 0;
-            SqliteDataReader reader;
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            SqliteCommand comando = new();
+            SqliteDataReader reader;
 
             conexion.Open();
 
             try
             {
                 // Obtener ID de cliente
-                SqliteCommand comando = new();
+                /*
                 comando.CommandText = "SELECT MAX(id_cliente) FROM cliente";
                 comando.Connection = conexion;
                 reader = comando.ExecuteReader();
@@ -217,14 +250,17 @@ namespace Cadeteria.Models
                     idc = reader.GetInt32(0) + 1;
                 }
                 reader.Close();
+                */
 
                 // Ingresar el cliente en caso de no existir
                 comando.CommandText = "SELECT * FROM cliente WHERE id_cliente = $id";
+                comando.Connection = conexion;
                 comando.Parameters.AddWithValue("$id", idc);
+                reader = comando.ExecuteReader();
 
-                Console.WriteLine("Por ingresar cliente");
-                if (comando.ExecuteScalar() == null)
+                if (!reader.HasRows)
                 {
+                    reader.Close();
                     comando.Parameters.Clear();
                     comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel)";
                     comando.Parameters.AddWithValue("$id", idc);
@@ -233,12 +269,12 @@ namespace Cadeteria.Models
                     comando.Parameters.AddWithValue("$tel", tel);
                     comando.ExecuteNonQuery();
                 }
-                Console.WriteLine("Cliente ingresado");
+                reader.Close();
 
                 // Ingresar pedido
                 comando.Parameters.Clear();
                 comando.CommandText = "INSERT INTO pedido VALUES ($id, $det, 'SinAsignar', $id_c, null)";
-                comando.Parameters.AddWithValue("$id", IDPedidos++);
+                comando.Parameters.AddWithValue("$id", ObtenerIDPedido() + 1);
                 comando.Parameters.AddWithValue("$det", det);
                 comando.Parameters.AddWithValue("$id_c", idc);
                 resultado = comando.ExecuteNonQuery();
@@ -296,8 +332,20 @@ namespace Cadeteria.Models
 
             try
             {
-                comando.CommandText = "DELETE FROM cadete WHERE id_cadete = $id";
+                comando.CommandText = "UPDATE pedido SET id_cadete = null WHERE id_cadete = $id AND estado = 'Entregado';";
                 comando.Connection = conexion;
+                comando.Parameters.AddWithValue("$id", id);
+                comando.ExecuteNonQuery();
+
+                comando.Parameters.Clear();
+                comando.CommandText = "UPDATE pedido SET id_cadete = null, estado = 'SinAsignar' WHERE id_cadete = $id AND estado != 'EntregadoBorrado';";
+                comando.Parameters.AddWithValue("$id", id);
+                comando.ExecuteNonQuery();
+
+                ActualizarPedidos();
+
+                comando.Parameters.Clear();
+                comando.CommandText = "DELETE FROM cadete WHERE id_cadete = $id;";
                 comando.Parameters.AddWithValue("$id", id);
                 resultado = comando.ExecuteNonQuery();
 
@@ -345,8 +393,27 @@ namespace Cadeteria.Models
 
         static public void RestaurarDatos()
         {
-            /* obtener datos de BD para restaurar */
-        }        
+            try
+            {
+                string sql = File.ReadAllText("database/restaurar.txt");
+
+                SqliteConnection conexion = new SqliteConnection(ConnectionString);
+                conexion.Open();
+
+                SqliteCommand comando = new(sql, conexion);
+                comando.ExecuteNonQuery();
+
+                conexion.Close();
+
+                ActualizarCadetes();
+                ActualizarPedidos();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error al restaurar la base de datos: " + ex.Message);
+            }
+            
+        }
 
         static private void ActualizarPedidos()
         {
@@ -385,19 +452,25 @@ namespace Cadeteria.Models
             ActualizarPedidos();
         }
 
-        static public void IniciarPedido(int id)
+        static public bool IniciarPedido(int id)
         {
+            bool resultado = false;
+
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             SqliteCommand comando = new();
             conexion.Open();
 
             try
             {
-                comando.CommandText = "UPDATE pedido SET estado = 'EnCurso' WHERE id_pedido = @id";
+                comando.CommandText = "UPDATE pedido SET estado = 'EnCurso' WHERE id_pedido = $id AND id_cadete IS NOT NULL";
                 comando.Connection = conexion;
-                comando.Parameters.AddWithValue("@id", id);
+                comando.Parameters.AddWithValue("$id", id);
 
-                if (comando.ExecuteNonQuery() > 0) PedidoList[id].IniciarPedido();
+                if (comando.ExecuteNonQuery() > 0)
+                {
+                    resultado = true;
+                    PedidoList[id].IniciarPedido();
+                }
 
             }
             catch (Exception ex)
@@ -408,9 +481,9 @@ namespace Cadeteria.Models
             conexion.Close();
 
             ActualizarPedidos();
-        }
 
-        
+            return resultado;
+        }
 
         static public void EntregarPedido(int id)
         {

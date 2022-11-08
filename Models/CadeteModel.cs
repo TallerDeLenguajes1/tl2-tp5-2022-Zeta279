@@ -13,5 +13,25 @@
         {
             ListadoPedidos.Add(pedido);
         }
+
+        public void EliminarPedidos()
+        {
+            ListadoPedidos.Clear();
+        }
+
+        public void EliminarPedido(int num)
+        {
+            int index = 0;
+
+            for(index = 0; index < ListadoPedidos.Count; index++)
+            {
+                if (ListadoPedidos[index].Nro == num)
+                {
+                    break;
+                }
+            }
+
+            ListadoPedidos.RemoveAt(index);
+        }
     }
 }

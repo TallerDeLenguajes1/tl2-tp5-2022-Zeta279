@@ -4,14 +4,21 @@
 @model PedidoModel
 
 <section>
-    <form method="post">
-        <input type="number" id="idp" name="idp" value="@Model.Nro" hidden>
-        <select id="idc" name="idc">
-            @foreach(var cadete in DataModel.CadeteVList)
-            {
-                <option value="@cadete.CadeteId">@cadete.nombre</option>
-            }
-        </select>
-        <input type="submit" value="Asignar al pedido">
-    </form>
+    @if(DataModel.CadeteVList.Count > 0)
+    {
+        <form method="post">
+            <input type="number" id="idp" name="idp" value="@Model.Nro" hidden>
+            <select id="idc" name="idc">
+                @foreach (var cadete in DataModel.CadeteVList)
+                {
+                    <option value="@cadete.CadeteId">@cadete.nombre</option>
+                }
+            </select>
+            <input type="submit" value="Asignar al pedido">
+        </form>
+    }
+    else
+    {
+        <h3>No hay ningún cadete para asignar</h3>
+    }
 </section>

@@ -75,5 +75,27 @@ namespace Cadeteria.Controllers
             if (DataModel.BorrarCadete(id)) return RedirectToAction("Index");
             else return RedirectToAction("Error", new { error = "Ocurrió un error al intentar borrar el cadete" });
         }
+
+        public ActionResult Prueba()
+        {
+            string ConnectionString = $"Data Source=database/cadeteria.db";
+            SqliteConnection conexion = new(ConnectionString);
+            SqliteDataReader reader;
+
+            conexion.Open();
+
+            SqliteCommand comando = new();
+            comando.CommandText = "SELECT MAX(id_pedido) FROM pedido";
+            comando.Connection = conexion;
+
+            reader = comando.ExecuteReader();
+            reader.Read();
+
+            Console.WriteLine(reader.IsDBNull(0));
+
+            conexion.Close();
+
+            return RedirectToAction("Index");
+        }
     }
 }

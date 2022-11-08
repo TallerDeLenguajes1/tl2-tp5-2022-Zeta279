@@ -70,11 +70,11 @@ namespace Cadeteria.Controllers
             else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
         }
 
-        public ActionResult IniciarPedido(int id)
+        public ActionResult Iniciar(int id)
         {
             if (DataModel.PedidoList.ContainsKey(id))
             {
-                DataModel.IniciarPedido(id);
+                if (!DataModel.IniciarPedido(id)) return RedirectToAction("Error", new { error = "No se ha podido iniciar el pedido" });
                 return RedirectToAction("Index");
             }
             else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido" });

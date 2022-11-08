@@ -31,6 +31,15 @@ namespace Cadeteria.ViewModels
         {
             NombreCadete = nombre;
         }
+
+        public string ObtenerEstado()
+        {
+            if (Estado == estado.SinAsignar) return "Sin asignar";
+            else if (Estado == estado.Pendiente) return "Pendiente";
+            else if (Estado == estado.EnCurso) return "En curso";
+            else if (Estado == estado.Entregado) return "Entregado";
+            else return "Indefinido";
+        }
     }
 
     public class CrearPedidoViewModel
