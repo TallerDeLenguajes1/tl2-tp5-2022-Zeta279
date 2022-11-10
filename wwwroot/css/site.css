@@ -237,24 +237,24 @@ form{
     margin-top: 1.2em;
 }
 
-#selec-cadete {
+#selec-cadetes {
     background-color: rgb(0, 153, 255);
 }
 
-#selec-pedido {
+#selec-pedidos {
     background-color: #d1480d;
 }
 
-#selec-pedido img{
+#selec-pedidos img{
     width: 60%;
     margin-top: 1em;
 }
 
-#selec-cliente {
+#selec-clientes {
     background-color: #41cc1b;
 }
 
-#selec-cliente img{
+#selec-clientes img{
     width: 70%;
     margin-top: 0.5em;
 }
