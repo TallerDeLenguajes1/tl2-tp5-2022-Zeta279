@@ -125,6 +125,11 @@ input[type="text"], input[type="number"] {
     padding: 0.1em 0.3em;
 }
 
+h1{
+    text-align: center;
+    margin-bottom: 1em;
+}
+
 form button {
     background-color: white;
     border: 1px solid #dedede;
@@ -205,6 +210,51 @@ form{
     box-shadow: steelblue 0px 0px 5px;
 }
 
-#nuevo-cliente{
+#nuevo-cliente {
     transition: 0.3s height;
+}
+
+#seleccion-principal {
+    display: flex;
+    justify-items: center;
+    justify-content: space-around;
+}
+
+#seleccion-principal a {
+    padding-top: 0.5em;
+    height: 10em;
+    width: 10em;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    border-radius: 10px;
+}
+
+#seleccion-principal img {
+    width: 80%;
+    display: block;
+    margin: auto;
+    margin-top: 1.2em;
+}
+
+#selec-cadete {
+    background-color: rgb(0, 153, 255);
+}
+
+#selec-pedido {
+    background-color: #d1480d;
+}
+
+#selec-pedido img{
+    width: 60%;
+    margin-top: 1em;
+}
+
+#selec-cliente {
+    background-color: #41cc1b;
+}
+
+#selec-cliente img{
+    width: 70%;
+    margin-top: 0.5em;
 }

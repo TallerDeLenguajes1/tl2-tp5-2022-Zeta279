@@ -8,6 +8,7 @@
         checkbox.checked = false;
         boton.innerHTML = "Nuevo";
         document.getElementById("nuevo-cliente").style.display = "none";
+        setTimeout(1000);
         document.getElementById("selec-cliente").style.display = "initial";
     }
     else
