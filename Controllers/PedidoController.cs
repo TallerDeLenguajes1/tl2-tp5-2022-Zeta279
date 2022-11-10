@@ -22,8 +22,20 @@ namespace Cadeteria.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente);
+                if (pedido.NuevoCliente)
+                {
+                    if(pedido.NombreCliente != null && pedido.DireccionCliente != null && pedido.TelefonoCliente != null)
+                    {
+                        DataModel.IngresarPedidoConCliente(pedido.Detalles, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Error", new { error = "No se ha podido crear el cliente" });
+                    }
+                }
+                else DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente);
                 return RedirectToAction("Index");
+                
             }
             else
             {

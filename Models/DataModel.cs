@@ -363,6 +363,50 @@ namespace Cadeteria.Models
             return resultado > 0;
         }
 
+        static public bool IngresarPedidoConCliente(string detPedido, string nomCliente, string direcCliente, string telCliente)
+        {
+            int resultado = 0, idCliente;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            SqliteCommand comando = new SqliteCommand();
+
+            idCliente = ObtenerIDCliente() + 1;
+
+            conexion.Open();
+
+            try
+            {
+                comando.Connection = conexion;
+                comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel);";
+                comando.Parameters.AddWithValue("$id", idCliente);
+                comando.Parameters.AddWithValue("$nom", nomCliente);
+                comando.Parameters.AddWithValue("$direc", direcCliente);
+                comando.Parameters.AddWithValue("$tel", telCliente);
+
+                resultado = comando.ExecuteNonQuery();
+
+                if(resultado > 0) ActualizarClientes();
+
+                comando.Parameters.Clear();
+                comando.CommandText = "INSERT INTO pedido VALUES ($id, $det, 'SinAsignar', $id_c, null)";
+                comando.Parameters.AddWithValue("$id", ObtenerIDPedido() + 1);
+                comando.Parameters.AddWithValue("$det", detPedido);
+                comando.Parameters.AddWithValue("$id_c", idCliente);
+                resultado = comando.ExecuteNonQuery();
+
+
+                if (resultado > 0) ActualizarPedidos();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (IngresarPedidoConCliente): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
+        }
+
         static public bool ActualizarCadete(int id, string nom, string direc, string tel)
         {
             int resultado = 0;

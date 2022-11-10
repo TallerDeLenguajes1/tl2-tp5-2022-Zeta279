@@ -7,11 +7,18 @@
 <section class="crear-pedido">
     <h2>Crear pedido</h2>
     <form method="post">
-        <h3>Datos del pedido</h3>
+        <h4>Datos del pedido</h4>
         <label asp-for="@Model.Detalles"></label>
         <input asp-for="@Model.Detalles">
 
-        <h5>Seleccionar cliente</h5>
+        <input asp-for="@Model.NuevoCliente" hidden>
+
+        <h5>Cliente</h5>
+        <a id="boton-cliente" href="#" onclick="manejoClientes()">Nuevo</a>
+
+        <!-- Cliente existente -->
+        <section id="selec-cliente">
+        <label asp-for="@Model.IDCliente">Seleccionar</label>
         @if(DataModel.ClienteList.Count > 0)
         {
             <select asp-for="@Model.IDCliente">
@@ -25,6 +32,19 @@
         {
             <p>No hay ningún cliente</p>
         }
+        </section>
+
+        <!-- Cliente nuevo -->
+        <section id="nuevo-cliente">
+            <label asp-for="@Model.NombreCliente"></label>
+            <input asp-for="@Model.NombreCliente">
+
+            <label asp-for="@Model.DireccionCliente"></label>
+            <input asp-for="@Model.DireccionCliente">
+
+            <label asp-for="@Model.TelefonoCliente"></label>
+            <input asp-for="@Model.TelefonoCliente">
+        </section>
         <button>Ingresar</button>
     </form>
 </section>

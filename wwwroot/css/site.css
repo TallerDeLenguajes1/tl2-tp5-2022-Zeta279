@@ -93,7 +93,7 @@ a{
   margin: 0;
 }
 
-.cadete-crear a, .pedido-crear a, .cliente-crear a {
+.crear a{
     text-decoration: none;
     display: block;
     padding: 0.1em 0.5em;
@@ -101,17 +101,17 @@ a{
     font-size: 20px;
     background-color: rgb(40, 199, 40);
     text-align: center;
-    border-radius: 10px;
-    transition: box-shadow 0.5s;
+    border-radius: 5px;
+    transition: box-shadow 0.2s linear;
 }
 
-.cadete-crear a:hover, .pedido-crear a:hover, .cliente-crear:hover{
+.crear a:hover{
     box-shadow: rgb(40, 199, 40) 0px 0px 10px;
 }
 
-.cadete-crear, .pedido-crear, .cliente-crear{
-  display: inline-block;
-  margin: 1em 0;
+.crear {
+    display: inline-block;
+    margin: 1em 0;
 }
 
 label{
@@ -119,20 +119,33 @@ label{
   margin: 0.2em 0;
 }
 
-input[type="submit"], button{
-  background-color: gray;
-  border: 0;
-  border-radius: 10px;
-  padding: 0.5em;
-  font-weight: bold;
-  color: white;
-  display: block;
-  margin: auto;
-  margin-top: 1em;
+input[type="text"], input[type="number"] {
+    border-radius: 10px;
+    border: 1px gray solid;
+    padding: 0.1em 0.3em;
 }
 
-input{
-  margin-bottom: 1em;
+form button {
+    background-color: white;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    padding: 0.5em;
+    font-weight: bold;
+    display: block;
+    color: gray;
+    margin: auto;
+    margin-top: 1em;
+    transition: 0.3s box-shadow linear, 0.3s border linear, 0.3s color linear;
+}
+
+form button:hover {
+    color: #4a4a4a;
+    border: 1px solid gray;
+    box-shadow: #dedede 0px 0px 5px;
+}
+
+input {
+    margin-bottom: 1em;
 }
 
 form{
@@ -165,4 +178,33 @@ form{
 .restaurar-datos:hover {
     background-color: #5421b9;
     color: white;
+}
+
+#nuevo-cliente, #selec-cliente{
+    overflow: hidden;
+}
+
+#nuevo-cliente{
+    display: none;
+}
+
+#boton-cliente{
+    color: white;
+    background-color: steelblue;
+    padding: 0.4em;
+    margin: 0.2em auto;
+    width: fit-content;
+    display: block;
+    font-size: 15px;
+    transition: 0.2s box-shadow;
+    border-radius: 5px;
+}
+
+#boton-cliente:hover{
+    color: white;
+    box-shadow: steelblue 0px 0px 5px;
+}
+
+#nuevo-cliente{
+    transition: 0.3s height;
 }
