@@ -55,5 +55,15 @@
             else curso = "No";
             return $"Número: {Nro}\nDetalles: {Detalles}\nEn curso: {curso}\nCliente: \n{cliente}";
         }
+
+        public static bool operator ==(PedidoModel ped1, PedidoModel ped2)
+        {
+            return ped1.Nro == ped2.Nro;
+        }
+
+        public static bool operator !=(PedidoModel ped1, PedidoModel ped2)
+        {
+            return ped1.Nro != ped2.Nro;
+        }
     }
 }

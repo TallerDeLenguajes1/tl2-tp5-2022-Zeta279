@@ -22,6 +22,16 @@ namespace Cadeteria.ViewModels
             this.direccion = direccion;
             this.telefono = telefono;
         }
+
+        static public bool operator ==(CadeteViewModel cad1, CadeteViewModel cad2)
+        {
+            return cad1.CadeteId == cad2.CadeteId;
+        }
+
+        static public bool operator !=(CadeteViewModel cad1, CadeteViewModel cad2)
+        {
+            return cad1.CadeteId != cad2.CadeteId;
+        }
     }
 
     public class CrearCadeteViewModel

@@ -18,7 +18,7 @@ namespace Cadeteria.ViewModels
 
         }
 
-        public PedidoViewModel(int num, string detalles, ClienteModel cliente, estado estado)
+        public PedidoViewModel(int num, string detalles, ClienteModel cliente, estado estado = estado.SinAsignar)
         {
             NumPedido = num;
             Detalles = detalles;
@@ -39,6 +39,16 @@ namespace Cadeteria.ViewModels
             else if (Estado == estado.EnCurso) return "En curso";
             else if (Estado == estado.Entregado) return "Entregado";
             else return "Indefinido";
+        }
+
+        static public bool operator ==(PedidoViewModel ped1, PedidoViewModel ped2)
+        {
+            return ped1.NumPedido == ped2.NumPedido;
+        }
+
+        static public bool operator !=(PedidoViewModel ped1, PedidoViewModel ped2)
+        {
+            return ped1.NumPedido != ped2.NumPedido;
         }
     }
 

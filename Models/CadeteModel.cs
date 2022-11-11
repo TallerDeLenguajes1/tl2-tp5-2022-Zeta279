@@ -33,5 +33,15 @@
 
             ListadoPedidos.RemoveAt(index);
         }
+
+        public static bool operator == (CadeteModel cad1, CadeteModel cad2)
+        {
+            return cad1.id == cad2.id;
+        }
+
+        public static bool operator != (CadeteModel cad1, CadeteModel cad2)
+        {
+            return cad1.id != cad2.id;
+        }
     }
 }

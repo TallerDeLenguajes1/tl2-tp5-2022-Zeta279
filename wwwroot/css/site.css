@@ -23,6 +23,7 @@ table{
   border-radius: 0.8em;
   overflow: hidden;
   border: 1px rgb(0, 153, 255) solid;
+  margin: 1em 0;
 }
 
 table th{
@@ -111,15 +112,14 @@ a{
 
 .crear {
     display: inline-block;
-    margin: 1em 0;
 }
 
-label{
+.form-create label, .form-edit label{
   display: block;
   margin: 0.2em 0;
 }
 
-input[type="text"], input[type="number"] {
+.form-create input[type="text"], .form-edit input[type="text"], .form-create input[type="number"], .form-edit input[type="number"] {
     border-radius: 10px;
     border: 1px gray solid;
     padding: 0.1em 0.3em;
@@ -130,7 +130,7 @@ h1{
     margin-bottom: 1em;
 }
 
-form button {
+.form-create button, .form-edit button {
     background-color: white;
     border: 1px solid #dedede;
     border-radius: 10px;
@@ -143,17 +143,17 @@ form button {
     transition: 0.3s box-shadow linear, 0.3s border linear, 0.3s color linear;
 }
 
-form button:hover {
+.form-create button:hover, .form-edit button:hover {
     color: #4a4a4a;
     border: 1px solid gray;
     box-shadow: #dedede 0px 0px 5px;
 }
 
-input {
+.form-create input, form-edit input {
     margin-bottom: 1em;
 }
 
-form{
+.form-create, .form-edit{
   margin: auto;
   border: 1px gray solid;
   border-radius: 10px;
@@ -257,4 +257,49 @@ form{
 #selec-clientes img{
     width: 70%;
     margin-top: 0.5em;
+}
+
+#cadete-pedido tbody tr{
+    display: none;
+}
+
+#cadete-index, #cliente-index, #pedido-index{
+    margin: auto;
+    width: fit-content;
+}
+
+#filtrar-pedidos{
+    display: none;
+}
+
+#filtrar {
+    padding: 0.3em 0.8em;
+    border: 1px solid rgb(0, 153, 255);
+    color: rgb(0, 153, 255);
+    border-radius: 5px;
+    transition: 0.2s box-shadow linear;
+    float: right;
+}
+
+#filtrar:hover {
+    box-shadow: rgb(0, 153, 255) 0px 0px 5px;
+}
+
+#filtrar-pedidos{
+    margin: 1.5em 0;
+    border: 1px solid lightgray;
+    padding: 0.8em;
+    border-radius: 10px;
+}
+
+#filtrar-pedidos button {
+    border-radius: 5px;
+    background-color: rgb(0, 153, 255);
+    border: 0;
+    color: white;
+    padding: 0.3em;
+}
+
+#filtrar-pedidos label{
+    margin-right: 2em;
 }

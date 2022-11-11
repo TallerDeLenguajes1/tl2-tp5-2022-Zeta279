@@ -6,7 +6,7 @@
 <section>
     @if(DataModel.CadeteVList.Count > 0)
     {
-        <form method="post">
+        <form method="post" class="form-edit">
             <input type="number" id="idp" name="idp" value="@Model.Nro" hidden>
             <select id="idc" name="idc">
                 @foreach (var cadete in DataModel.CadeteVList)

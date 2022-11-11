@@ -2,65 +2,97 @@
     ViewData["Title"] = "Pedidos";
 }
 
+@using Cadeteria.DataModels
 @model List<Cadeteria.ViewModels.PedidoViewModel>
 
 <h1>Pedidos</h1>
-<section class="crear">
-    <a asp-controller="Pedido" asp-action="Create">+</a>
-</section>
 
-<section class="pedidos">
-    @if(Model.Count > 0)
-    {
-        <table>
-            <thead>
-            <th>Detalles</th>
-            <th>Estado</th>
-            <th>Cadete</th>
-            <th>Acciones</th>
-            </thead>
-            <tbody>
-                @foreach (var pedido in Model)
-                {
-                    <tr>
-                        <td>@pedido.Detalles</td>
-                        <td>@pedido.ObtenerEstado()</td>
-                        @if (pedido.NombreCadete == null)
-                        {
-                            <td>-</td>
-                        }
-                        else
-                        {
-                            <td>@pedido.NombreCadete</td>
-                        }
-
-                        <td>
-                            <section class="table-botones">
-                                @if (pedido.Estado == estado.SinAsignar)
-                                {
-                                    <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Asignar</a>
-                                }
-                                @if (pedido.Estado == estado.Pendiente)
-                                {
-                                    <a asp-controller="Pedido" asp-action="Iniciar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Iniciar Pedido</a>
-                                }
-                                @if (pedido.Estado == estado.EnCurso)
-                                {
-                                    <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.NumPedido" class="pedido-estado">Entregar</a>
-                                }
-                                <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Borrar</a>
-                                <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.NumPedido" class="pedido-detalles">Detalles</a>
-                            </section>
-                        </td>
-
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <h3>No existe ningún pedido</h3>
-    }
+<section id="pedido-index">
+    <section id="manejo-pedidos">
+        <section class="crear">
+            <a asp-controller="Pedido" asp-action="Create">+</a>
+        </section>
+        <a href="#" id="filtrar" onclick="filtrosPedidos()">Filtrar</a>
+    </section>
     
+    <section id="filtrar-pedidos">
+        <form method="post">
+            <label for="filtrar-cadete">Cadete
+            <select name="idCadete" id="filtrar-cadete">
+                <option value="0">Cualquier cadete</option>
+                @foreach(var cadete in DataModel.CadeteVList)
+                {
+                    <option value="@cadete.CadeteId">@cadete.nombre</option>
+                }
+            </select>
+            </label>
+            <label for="filtrar-cliente">Cliente
+            <select name="idCliente" id="filtrar-cliente">
+                <option value="0">Cualquier cliente</option>
+                @foreach (var cliente in DataModel.ClienteVList)
+                {
+                    <option value="@cliente.ID">@cliente.Nombre</option>
+                }
+            </select>
+            </label>
+            <button>Aplicar</button>
+        </form>
+    </section>
+    
+
+    <section class="pedidos">
+        @if(Model.Count > 0)
+        {
+            <table>
+                <thead>
+                <th>Detalles</th>
+                <th>Estado</th>
+                <th>Cadete</th>
+                <th>Acciones</th>
+                </thead>
+                <tbody>
+                    @foreach (var pedido in Model)
+                    {
+                        <tr>
+                            <td>@pedido.Detalles</td>
+                            <td>@pedido.ObtenerEstado()</td>
+                            @if (pedido.NombreCadete == null)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@pedido.NombreCadete</td>
+                            }
+
+                            <td>
+                                <section class="table-botones">
+                                    @if (pedido.Estado == estado.SinAsignar)
+                                    {
+                                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Asignar</a>
+                                    }
+                                    @if (pedido.Estado == estado.Pendiente)
+                                    {
+                                        <a asp-controller="Pedido" asp-action="Iniciar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Iniciar Pedido</a>
+                                    }
+                                    @if (pedido.Estado == estado.EnCurso)
+                                    {
+                                        <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.NumPedido" class="pedido-estado">Entregar</a>
+                                    }
+                                    <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Borrar</a>
+                                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.NumPedido" class="pedido-detalles">Detalles</a>
+                                </section>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h3>No existe ningún pedido</h3>
+        }
+    
+    </section>
 </section>

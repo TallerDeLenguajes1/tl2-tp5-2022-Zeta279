@@ -151,6 +151,29 @@ namespace Cadeteria.Models
             return lista;
         }
 
+        static public Dictionary<CadeteViewModel, List<PedidoViewModel>> CadeteConPedidos()
+        {
+            Dictionary<CadeteViewModel, List<PedidoViewModel>> dict = new();
+
+            try
+            {
+                foreach(var cadete in CadeteVList)
+                {
+                    dict.Add(cadete, new List<PedidoViewModel>());
+                    foreach(var pedido in PedidoVList)
+                    {
+                        if (PedidosConCadetes[pedido.NumPedido] == cadete.CadeteId) dict[cadete].Add(pedido);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (CadeteConPedidos): " + ex.Message);
+            }
+
+            return dict;
+        }
+
         static private Dictionary<int, CadeteModel> ObtenerCadetes()
         {
             Dictionary<int, CadeteModel> cadetes = new();
