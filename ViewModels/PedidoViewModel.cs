@@ -9,7 +9,7 @@ namespace Cadeteria.ViewModels
     {
         public int NumPedido { get; set; }
         public string Detalles { get; set; }
-        public ClienteModel Cliente { get; set; }
+        public ClienteViewModel Cliente { get; set; }
         public string NombreCadete {get; set;}
         public estado Estado { get; set; }
 
@@ -18,7 +18,7 @@ namespace Cadeteria.ViewModels
 
         }
 
-        public PedidoViewModel(int num, string detalles, ClienteModel cliente, estado estado = estado.SinAsignar)
+        public PedidoViewModel(int num, string detalles, ClienteViewModel cliente, estado estado = estado.SinAsignar)
         {
             NumPedido = num;
             Detalles = detalles;
