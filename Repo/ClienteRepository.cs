@@ -1,5 +1,6 @@
 ﻿using Cadeteria.ViewModels;
 using Microsoft.Data.Sqlite;
+using System.Reflection.PortableExecutable;
 
 namespace Cadeteria.Repo
 {
@@ -7,6 +8,7 @@ namespace Cadeteria.Repo
     {
         List<ClienteViewModel> ObtenerTodo();
         ClienteViewModel Obtener(int id);
+        bool Crear(string nom, string direc, string tel);
         bool Actualizar(int id, string nom, string direc, string tel);
         bool Borrar(int id);
     }
@@ -76,6 +78,51 @@ namespace Cadeteria.Repo
             conexion.Close();
 
             return cliente;
+        }
+
+        public bool Crear(string nom, string direc, string tel)
+        {
+            int resultado = 0, id;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            conexion.Open();
+            SqliteCommand comando = new SqliteCommand();
+            SqliteDataReader reader;
+            comando.Connection = conexion;
+
+            try
+            {
+                // Obtener ID
+                comando.CommandText = "SELECT MAX(id_cliente) + 1 FROM cliente";
+                reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (reader.IsDBNull(0))
+                {
+                    id = 1;
+                }
+                else
+                {
+                    id = reader.GetInt32(0);
+                }
+
+                // Ingresar cliente
+                comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel);";
+                comando.Parameters.AddWithValue("id", id);
+                comando.Parameters.AddWithValue("$nom", nom);
+                comando.Parameters.AddWithValue("$direc", direc);
+                comando.Parameters.AddWithValue("$tel", tel);
+
+                resultado = comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (IngresarCliente): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
         }
 
         public bool Actualizar(int id, string nom, string direc, string tel)

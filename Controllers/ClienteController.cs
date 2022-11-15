@@ -2,15 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Cadeteria.Models;
 using Cadeteria.ViewModels;
+using Cadeteria.Repo;
 
 namespace Cadeteria.Controllers
 {
     public class ClienteController : Controller
     {
+        private readonly IClienteRepository ClienteRepo;
+
+        public ClienteController(IClienteRepository clienteRepo)
+        {
+            ClienteRepo = clienteRepo;
+        }
+
         // GET: ClienteController
         public ActionResult Index()
         {
-            return View(DataModel.ClienteVList);
+            return View(ClienteRepo.ObtenerTodo());
         }
 
         // GET: ClienteController/Create
@@ -24,7 +32,7 @@ namespace Cadeteria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CrearClienteViewModel cliente)
         {
-            if (ModelState.IsValid && DataModel.IngresarCliente(cliente.ID, cliente.Nombre, cliente.Direccion, cliente.Telefono))
+            if (ModelState.IsValid && ClienteRepo.Crear(cliente.Nombre, cliente.Direccion, cliente.Telefono))
             {
                 return RedirectToAction("Index");
             }
@@ -37,12 +45,15 @@ namespace Cadeteria.Controllers
         // GET: ClienteController/Edit/5
         public ActionResult Edit(int id)
         {
-            if (DataModel.CadeteList.ContainsKey(id))
+            var cliente = ClienteRepo.Obtener(id);
+            if (cliente is not null)
             {
-                var cliente = DataModel.ClienteList[id];
-                return View(new ClienteViewModel(id, cliente.nombre, cliente.telefono, cliente.direccion));
+                return View(cliente);
             }
-            return RedirectToAction("Error", new { error = "No se ha encontrado el cliente solicitado" });
+            else
+            {
+                return RedirectToAction("Error", new { error = "No se ha encontrado el cliente solicitado" });
+            }
         }
 
         // POST: ClienteController/Edit/5
@@ -52,7 +63,7 @@ namespace Cadeteria.Controllers
         {
             if (ModelState.IsValid)
             {
-                DataModel.ActualizarCliente(cliente.ID, cliente.Nombre, cliente.Direccion, cliente.Telefono);
+                ClienteRepo.Actualizar(cliente.ID, cliente.Nombre, cliente.Direccion, cliente.Telefono);
                 return RedirectToAction("Index");
             }
             else
@@ -64,7 +75,7 @@ namespace Cadeteria.Controllers
         // GET: ClienteController/Delete/5
         public ActionResult Delete(int id)
         {
-            if (DataModel.BorrarCliente(id)) return RedirectToAction("Index");
+            if (ClienteRepo.Borrar(id)) return RedirectToAction("Index");
             else return RedirectToAction("Error", new { error = "Ocurrió un error al intentar borrar el cliente" });
         }
 

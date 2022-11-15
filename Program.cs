@@ -1,7 +1,14 @@
+using Cadeteria.Repo;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Services
+builder.Services.AddTransient<ICadeteRepository, CadeteRepository>();
+builder.Services.AddTransient<IPedidoRepository, PedidoResitory>();
+builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 
 var app = builder.Build();
 

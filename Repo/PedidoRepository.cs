@@ -8,8 +8,11 @@ namespace Cadeteria.Repo
     {
         List<PedidoViewModel> ObtenerTodo();
         PedidoViewModel Obtener(int id);
+        bool Crear(string det, int idc);
+        bool CrearPedidoConCliente(string det, string nom, string direc, string tel);
         bool Borrar(int id);
-        void AsignarCadete(int idPedido, int idCadete);
+        bool AsignarCadete(int idPedido, int idCadete);
+        bool CambiarEstado(int id, estado estado);
         void BorrarCadete(int id);
     }
 
@@ -117,17 +120,118 @@ namespace Cadeteria.Repo
             return pedido;
         }
 
+        public bool Crear(string det, int idc)
+        {
+            int resultado = 0, id;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            conexion.Open();
+            SqliteCommand comando = new();
+            comando.Connection = conexion;
+            SqliteDataReader reader;
+
+            try
+            {
+                // Obtener ID
+                comando.CommandText = "SELECT MAX(id_pedido) + 1 FROM pedido";
+                reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (reader.IsDBNull(0))
+                {
+                    id = 1;
+                }
+                else
+                {
+                    id = reader.GetInt32(0);
+                }
+
+                // Ingresar pedido
+                comando.CommandText = "INSERT INTO pedido VALUES ($id, $det, 'SinAsignar', $id_c, null)";
+                comando.Parameters.AddWithValue("$id", id);
+                comando.Parameters.AddWithValue("$det", det);
+                comando.Parameters.AddWithValue("$id_c", idc);
+                resultado = comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (PedidoRepo, Crear): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
+        }
+
+        public bool CrearPedidoConCliente(string det, string nom, string direc, string tel)
+        {
+            int resultado = 0, idp, idc;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            conexion.Open();
+            SqliteCommand comando = new();
+            comando.Connection = conexion;
+            SqliteDataReader reader;
+
+            try
+            {
+                // Obtener ID de pedido
+                comando.CommandText = "SELECT MAX(id_pedido) + 1 FROM pedido";
+                reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (reader.IsDBNull(0))
+                {
+                    idp = 1;
+                }
+                else
+                {
+                    idp = reader.GetInt32(0);
+                }
+
+                // Obtener ID de cliente
+                comando.CommandText = "SELECT MAX(id_cliente) + 1 FROM cliente";
+                reader.Close();
+                reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (reader.IsDBNull(0))
+                {
+                    idc = 1;
+                }
+                else
+                {
+                    idc = reader.GetInt32(0);
+                }
+
+                // Ingresar pedido
+                comando.CommandText = "INSERT INTO pedido VALUES ($id, $det, 'SinAsignar', $id_c, null)";
+                comando.Parameters.AddWithValue("$id", idp);
+                comando.Parameters.AddWithValue("$det", det);
+                comando.Parameters.AddWithValue("$id_c", idc);
+                resultado = comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (PedidoRepo, CrearPedidoConCliente): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
+        }
+
         public bool Borrar(int id)
         {
             int resultado = 0;
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
             SqliteCommand comando = new();
+            comando.Connection = conexion;
 
             try
             {
                 comando.CommandText = "DELETE FROM pedido WHERE id_pedido = $id";
-                comando.Connection = conexion;
                 comando.Parameters.AddWithValue("$id", id);
 
                 resultado = comando.ExecuteNonQuery();
@@ -142,8 +246,10 @@ namespace Cadeteria.Repo
             return resultado > 0;
         }
 
-        public void AsignarCadete(int idPedido, int idCadete)
+        public bool AsignarCadete(int idPedido, int idCadete)
         {
+            int resultado = 0;
+
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
             SqliteCommand comando = new();
@@ -154,7 +260,7 @@ namespace Cadeteria.Repo
                 comando.Connection = conexion;
                 comando.Parameters.AddWithValue("$idc", idCadete);
                 comando.Parameters.AddWithValue("$idp", idPedido);
-                comando.ExecuteNonQuery();
+                resultado = comando.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -162,6 +268,52 @@ namespace Cadeteria.Repo
             }
 
             conexion.Close();
+
+            return resultado > 0;
+        }
+
+        public bool CambiarEstado(int id, estado estado)
+        {
+            string est = null;
+            int resultado = 0;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            conexion.Open();
+            SqliteCommand comando = new();
+
+            try
+            {
+                if(estado == estado.SinAsignar)
+                {
+                    est = "SinAsignar";
+                }
+                if(estado == estado.Pendiente)
+                {
+                    est = "Pendiente";
+                }
+                if(estado == estado.EnCurso)
+                {
+                    est = "EnCurso";
+                }
+                if(estado == estado.Entregado)
+                {
+                    est = "Entregado";
+                }
+
+                comando.CommandText = "UPDATE pedido SET estado = $est WHERE id_pedido = $idp;";
+                comando.Connection = conexion;
+                comando.Parameters.AddWithValue("$id", id);
+                comando.Parameters.AddWithValue("$est", est);
+                resultado = comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (PedidoRepo, CambiarEstado): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
         }
 
         public void BorrarCadete(int id)

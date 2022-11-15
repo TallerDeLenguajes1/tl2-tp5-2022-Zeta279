@@ -20,7 +20,7 @@
             <label for="filtrar-cadete">Cadete
             <select name="idCadete" id="filtrar-cadete">
                 <option value="0">Cualquier cadete</option>
-                @foreach(var cadete in DataModel.CadeteVList)
+                @foreach(var cadete in (List<Cadeteria.ViewModels.CadeteViewModel>)ViewData["cadetes"])
                 {
                     <option value="@cadete.CadeteId">@cadete.nombre</option>
                 }
@@ -29,7 +29,7 @@
             <label for="filtrar-cliente">Cliente
             <select name="idCliente" id="filtrar-cliente">
                 <option value="0">Cualquier cliente</option>
-                @foreach (var cliente in DataModel.ClienteVList)
+                    @foreach (var cliente in (List<Cadeteria.ViewModels.ClienteViewModel>)ViewData["clientes"])
                 {
                     <option value="@cliente.ID">@cliente.Nombre</option>
                 }

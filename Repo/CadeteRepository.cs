@@ -7,6 +7,7 @@ namespace Cadeteria.Repo
     {
         List<CadeteViewModel> ObtenerTodo();
         CadeteViewModel Obtener(int id);
+        bool Crear(string nom, string direc, string tel);
         bool Actualizar(int id, string nom, string direc, string tel);
         bool Borrar(int id);
     }
@@ -19,7 +20,6 @@ namespace Cadeteria.Repo
         {
             ConnectionString = "Data Source=database/cadeteria.db";
         }
-
 
         public List<CadeteViewModel> ObtenerTodo()
         {
@@ -78,6 +78,51 @@ namespace Cadeteria.Repo
             conexion.Close();
 
             return cadete;
+        }
+
+        public bool Crear(string nom, string direc, string tel)
+        {
+            int resultado = 0, id;
+
+            SqliteConnection conexion = new SqliteConnection(ConnectionString);
+            conexion.Open();
+            SqliteCommand comando = new SqliteCommand();
+            SqliteDataReader reader;
+            comando.Connection = conexion;
+
+            try
+            {
+                // Obtener ID
+                comando.CommandText = "SELECT MAX(id_cadete) + 1 FROM cadete";
+                reader = comando.ExecuteReader();
+                reader.Read();
+
+                if (reader.IsDBNull(0))
+                {
+                    id = 1;
+                }
+                else
+                {
+                    id = reader.GetInt32(0);
+                }
+
+                // Ingresar cadete
+                comando.CommandText = "INSERT INTO cadete VALUES ($id, $nom, $direc, $tel, 1);";
+                comando.Parameters.AddWithValue("id", id);
+                comando.Parameters.AddWithValue("$nom", nom);
+                comando.Parameters.AddWithValue("$direc", direc);
+                comando.Parameters.AddWithValue("$tel", tel);
+
+                resultado = comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ha ocurrido un error (IngresarCadete): " + ex.Message);
+            }
+
+            conexion.Close();
+
+            return resultado > 0;
         }
 
         public bool Actualizar(int id, string nom, string direc, string tel)

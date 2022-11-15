@@ -2,14 +2,28 @@
 using Cadeteria.Models;
 using Cadeteria.ViewModels;
 using Cadeteria.DataModels;
+using Cadeteria.Repo;
 
 namespace Cadeteria.Controllers
 {
     public class PedidoController : Controller
     {
+        private readonly IPedidoRepository PedidoRepo;
+
+        public PedidoController(IPedidoRepository pedidoRepo)
+        {
+            PedidoRepo = pedidoRepo;
+
+            var Cadetes = new CadeteRepository();
+            var Clientes = new ClienteRepository();
+
+            ViewData["cadetes"] = Cadetes.ObtenerTodo();
+            ViewData["clientes"] = Clientes.ObtenerTodo();
+        }
+
         public ActionResult Index()
         {
-            return View(DataModel.PedidoVList);
+            return View(PedidoRepo.ObtenerTodo());
         }
 
         [HttpPost]
@@ -51,20 +65,22 @@ namespace Cadeteria.Controllers
         [HttpPost]
         public ActionResult Create(CrearPedidoViewModel pedido)
         {
+            var clienteRepo = new ClienteRepository();
+
             if (ModelState.IsValid)
             {
                 if (pedido.NuevoCliente)
                 {
                     if(pedido.NombreCliente != null && pedido.DireccionCliente != null && pedido.TelefonoCliente != null)
                     {
-                        DataModel.IngresarPedidoConCliente(pedido.Detalles, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente);
+                        clienteRepo.Crear(pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente);
                     }
                     else
                     {
                         return RedirectToAction("Error", new { error = "No se ha podido crear el cliente" });
                     }
                 }
-                else DataModel.IngresarPedido(pedido.Detalles, pedido.IDCliente);
+                PedidoRepo.Crear(pedido.Detalles, pedido.IDCliente);
                 return RedirectToAction("Index");
                 
             }
@@ -76,21 +92,18 @@ namespace Cadeteria.Controllers
 
         public ActionResult Details(int id)
         {
-            if (DataModel.PedidoList.ContainsKey(id))
+            var pedido = PedidoRepo.Obtener(id);
+            if (pedido is not null)
             {
-                foreach(var pedido in DataModel.PedidoVList)
-                {
-                    if (pedido.NumPedido == id) return View(pedido);
-                }
+                return View(pedido);
             }
             return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
         }
 
         public ActionResult Delete(int id)
         {
-            if (DataModel.PedidoList.ContainsKey(id))
+            if (PedidoRepo.Borrar(id))
             {
-                DataModel.BorrarPedido(id);
                 return RedirectToAction("Index");
             }
             else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
@@ -98,10 +111,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Estado(int id)
         {
-            if (DataModel.PedidoList.ContainsKey(id))
+            var pedido = PedidoRepo.Obtener(id);
+
+            if (pedido is not null && pedido.Estado == estado.EnCurso)
             {
-                if (DataModel.PedidoList[id].Estado == estado.Pendiente) DataModel.IniciarPedido(id);
-                DataModel.EntregarPedido(id);
+                PedidoRepo.CambiarEstado(id, estado.Entregado);
                 return RedirectToAction("Index");
             }
             else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
@@ -109,30 +123,42 @@ namespace Cadeteria.Controllers
 
         public ActionResult Asignar(int id)
         {
-            if (DataModel.PedidoList.ContainsKey(id)) return View(DataModel.PedidoList[id]);
-            else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
-        }
+            var pedido = PedidoRepo.Obtener(id);
 
-        public ActionResult Cadetes()
-        {
-            return View(DataModel.CadeteConPedidos());
+            if (pedido is not null)
+            {
+                return View(pedido);
+            }
+            else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
         }
 
         public ActionResult Iniciar(int id)
         {
-            if (DataModel.PedidoList.ContainsKey(id))
+            var pedido = PedidoRepo.Obtener(id);
+
+            if (pedido is not null && pedido.Estado == estado.Pendiente)
             {
-                if (!DataModel.IniciarPedido(id)) return RedirectToAction("Error", new { error = "No se ha podido iniciar el pedido" });
+                PedidoRepo.CambiarEstado(id, estado.EnCurso);
                 return RedirectToAction("Index");
             }
-            else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido" });
+            else
+            {
+                return RedirectToAction("Error", new { error = "No se ha podido iniciar el pedido" });
+            }
         }
 
         [HttpPost]
         public ActionResult Asignar(int idp, int idc)
         {
-            DataModel.AsignarPedidoACadete(idp, idc);
-            return RedirectToAction("Index");
+            if(PedidoRepo.AsignarCadete(idp, idc))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Error", new { error = "No se ha podido asignar el pedido" });
+            }
+
         }
 
         public ActionResult Error(string error)
