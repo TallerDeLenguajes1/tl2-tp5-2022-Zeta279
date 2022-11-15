@@ -2,6 +2,7 @@
     ViewData["Title"] = "Crear pedido";
 }
 
+@using Cadeteria.ViewModels
 @model Cadeteria.ViewModels.CrearPedidoViewModel
 
 <section class="crear-pedido">
@@ -19,12 +20,12 @@
         <!-- Cliente existente -->
         <section id="selec-cliente">
         <label asp-for="@Model.IDCliente">Seleccionar</label>
-        @if(DataModel.ClienteList.Count > 0)
+        @if(((List<ClienteViewModel>)ViewData["clientes"]).Count > 0)
         {
             <select asp-for="@Model.IDCliente">
-                @foreach (var cliente in DataModel.ClienteList)
+                    @foreach (var cliente in (List<ClienteViewModel>)ViewData["clientes"])
                 {
-                    <option value="@cliente.Key">@cliente.Value.nombre</option>
+                    <option value="@cliente.ID">@cliente.Nombre</option>
                 }
             </select>
         }

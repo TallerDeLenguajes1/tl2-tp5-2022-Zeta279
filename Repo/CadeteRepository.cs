@@ -107,17 +107,17 @@ namespace Cadeteria.Repo
                 }
 
                 // Ingresar cadete
+                reader.Close();
                 comando.CommandText = "INSERT INTO cadete VALUES ($id, $nom, $direc, $tel, 1);";
                 comando.Parameters.AddWithValue("id", id);
                 comando.Parameters.AddWithValue("$nom", nom);
                 comando.Parameters.AddWithValue("$direc", direc);
                 comando.Parameters.AddWithValue("$tel", tel);
-
                 resultado = comando.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ha ocurrido un error (IngresarCadete): " + ex.Message);
+                Console.WriteLine("Ha ocurrido un error (CadeteRepo, Crear): " + ex.Message);
             }
 
             conexion.Close();

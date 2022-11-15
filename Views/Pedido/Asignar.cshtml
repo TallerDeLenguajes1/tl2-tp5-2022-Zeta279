@@ -1,17 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Asignar pedido";
 }
+
+@using Cadeteria.ViewModels
 @model PedidoModel
 
 <section>
-    @if(DataModel.CadeteVList.Count > 0)
+    @if (((List<CadeteViewModel>)ViewData["cadetes"]).Count > 0)
     {
         <form method="post" class="form-edit">
             <input type="number" id="idp" name="idp" value="@Model.Nro" hidden>
             <select id="idc" name="idc">
-                @foreach (var cadete in DataModel.CadeteVList)
+                @foreach (var cadete in (List<ClienteViewModel>)ViewData["cadetes"])
                 {
-                    <option value="@cadete.CadeteId">@cadete.nombre</option>
+                    <option value="@cadete.ID">@cadete.Nombre</option>
                 }
             </select>
             <input type="submit" value="Asignar al pedido">

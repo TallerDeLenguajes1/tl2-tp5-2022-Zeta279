@@ -25,8 +25,6 @@ namespace Cadeteria.Controllers
 
         public IActionResult Restaurar()
         {
-            DataModel.RestaurarDatos();
-
             return RedirectToAction("Index");
         }
 
