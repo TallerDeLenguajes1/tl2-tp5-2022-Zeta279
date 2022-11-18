@@ -83,11 +83,12 @@ namespace Cadeteria.Repo
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
             SqliteCommand comando = new();
+            comando.Connection = conexion;
             SqliteDataReader reader;
 
             try
             {
-                comando.CommandText = "SELECT * FROM pedido WHERE id_pedido = $id;";
+                comando.CommandText = "SELECT * FROM pedido INNER JOIN cliente USING (id_cliente) WHERE id_pedido = $id;";
                 comando.Parameters.AddWithValue("$id", id);
                 reader = comando.ExecuteReader();
 
@@ -413,7 +414,7 @@ namespace Cadeteria.Repo
                     est = "Entregado";
                 }
 
-                comando.CommandText = "UPDATE pedido SET estado = $est WHERE id_pedido = $idp;";
+                comando.CommandText = "UPDATE pedido SET estado = $est WHERE id_pedido = $id;";
                 comando.Connection = conexion;
                 comando.Parameters.AddWithValue("$id", id);
                 comando.Parameters.AddWithValue("$est", est);

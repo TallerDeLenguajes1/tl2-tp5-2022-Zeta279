@@ -73,6 +73,7 @@
                                     @if (pedido.Estado == estado.Pendiente)
                                     {
                                         <a asp-controller="Pedido" asp-action="Iniciar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Iniciar Pedido</a>
+                                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Reasignar</a>
                                     }
                                     @if (pedido.Estado == estado.EnCurso)
                                     {

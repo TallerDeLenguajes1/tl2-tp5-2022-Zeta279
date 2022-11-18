@@ -57,6 +57,7 @@ namespace Cadeteria.Repo
             SqliteConnection conexion = new(ConnectionString);
             conexion.Open();
             SqliteCommand comando = new();
+            comando.Connection = conexion;
             SqliteDataReader reader;
 
             try
@@ -107,6 +108,7 @@ namespace Cadeteria.Repo
                 }
 
                 // Ingresar cliente
+                reader.Close();
                 comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel);";
                 comando.Parameters.AddWithValue("id", id);
                 comando.Parameters.AddWithValue("$nom", nom);
@@ -117,7 +119,7 @@ namespace Cadeteria.Repo
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ha ocurrido un error (IngresarCliente): " + ex.Message);
+                Console.WriteLine("Ha ocurrido un error (ClienteRepo, Crear): " + ex.Message);
             }
 
             conexion.Close();
