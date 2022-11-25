@@ -4,6 +4,7 @@ using Cadeteria.Models;
 using Cadeteria.ViewModels;
 using Microsoft.Data.Sqlite;
 using Cadeteria.Repo;
+using Microsoft.AspNetCore.Session;
 
 namespace Cadeteria.Controllers
 {
@@ -16,11 +17,18 @@ namespace Cadeteria.Controllers
             CadeteRepo = cadeteRepo;
         }
 
-
         // GET: CadeteController
         public ActionResult Index()
         {
             return View(CadeteRepo.ObtenerTodo());
+        }
+
+        public ActionResult Sesion()
+        {
+            ViewData["name"] = HttpContext.Session.GetString("name");
+            ViewData["rol"] = HttpContext.Session.GetString("rol");
+
+            return View();
         }
 
         public ActionResult Error(string error)

@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<section id="logeo">
+    <h2>Iniciar sesión</h2>
+    <form action="Logging/Verificar" method="post">
+        <label for="usuario">Usuario
+            <input type="text" name="usuario" id="usuario">
+        </label>
+        <label for="pass">Contraseña
+            <input type="password" name="pass" id="pass">
+        </label>
+        <button>Iniciar sesión</button>
+    </form>
+</section>
