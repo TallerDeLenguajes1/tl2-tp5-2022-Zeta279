@@ -39,9 +39,9 @@ namespace Cadeteria.Repo
                     {
                         user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Administrador);
                     }
-                    if(reader.GetString(4) == "Cadete")
+                    if(reader.GetString(4) == "Encargado")
                     {
-                        user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Cadete);
+                        user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Encargado);
                     }
                 }
                 

@@ -14,6 +14,8 @@ namespace Cadeteria.Controllers
 
         public CadeteController(ICadeteRepository cadeteRepo)
         {
+            
+
             CadeteRepo = cadeteRepo;
         }
 
@@ -25,8 +27,7 @@ namespace Cadeteria.Controllers
 
         public ActionResult Sesion()
         {
-            ViewData["name"] = HttpContext.Session.GetString("name");
-            ViewData["rol"] = HttpContext.Session.GetString("rol");
+            
 
             return View();
         }

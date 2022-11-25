@@ -5,7 +5,7 @@ namespace Cadeteria.ViewModels
 {
     public enum RolUsuario{
         Administrador,
-        Cadete
+        Encargado
     }
 
     public class UsuarioViewModel

@@ -38,8 +38,9 @@ namespace Cadeteria.Controllers
                 {
                     HttpContext.Session.SetInt32("rol", 1);
                 }
-                if(user.Rol == RolUsuario.Cadete)
+                if(user.Rol == RolUsuario.Encargado)
                 {
+                    /* Lo mismo que el administrador, salvo dar de alta pedidos y modificar pedidos */
                     HttpContext.Session.SetInt32("rol", 2);
                 }
 
