@@ -158,3 +158,4 @@ C:\Users\Alumno\Desktop\Taller 2\tl2-tp5-2022-Zeta279\obj\Debug\net6.0\Cadeteria
 C:\Users\Alumno\Desktop\Taller 2\tl2-tp5-2022-Zeta279\obj\Debug\net6.0\Cadeteria.genruntimeconfig.cache
 C:\Users\Alumno\Desktop\Taller 2\tl2-tp5-2022-Zeta279\obj\Debug\net6.0\ref\Cadeteria.dll
 C:\Users\Alumno\Desktop\Taller 2\tl2-tp5-2022-Zeta279\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\Users\USUARIO\Desktop\Facultad\Taller de lenguajes II\TP\TP5\bin\Debug\net6.0\System.Security.Permissions.dll
