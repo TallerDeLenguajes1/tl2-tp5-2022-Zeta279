@@ -6,10 +6,10 @@ namespace Cadeteria.ViewModels
 {
     public class CadeteViewModel
     {
-        public int CadeteId { get; set; }
-        public string nombre { get; set; }
-        public string direccion { get; set; }
-        public string telefono { get; set; }
+        public int ID { get; set; }
+        public string Nombre { get; set; }
+        public string Direccion { get; set; }
+        public string Telefono { get; set; }
 
         public CadeteViewModel()
         {
@@ -17,37 +17,46 @@ namespace Cadeteria.ViewModels
         }
         public CadeteViewModel(int id, string nombre, string direccion, string telefono)
         {
-            this.CadeteId = id;
-            this.nombre = nombre;
-            this.direccion = direccion;
-            this.telefono = telefono;
+            this.ID = id;
+            this.Nombre = nombre;
+            this.Direccion = direccion;
+            this.Telefono = telefono;
         }
 
         static public bool operator ==(CadeteViewModel cad1, CadeteViewModel cad2)
         {
-            return cad1.CadeteId == cad2.CadeteId;
+            return cad1.ID == cad2.ID;
         }
 
         static public bool operator !=(CadeteViewModel cad1, CadeteViewModel cad2)
         {
-            return cad1.CadeteId != cad2.CadeteId;
+            return cad1.ID != cad2.ID;
         }
     }
 
     public class CrearCadeteViewModel
     {
+        public int ID { get; set; }
+
         [Required]
         [DisplayName("Nombre")]
         public string Nombre { get; set; }
 
         [Required]
         [DisplayName("Teléfono")]
-        public long Tel { get; set; }
+        public long Telefono { get; set; }
 
         [Required]
         [StringLength(80)]
         [DisplayName("Dirección")]
         public string Direccion { get; set; }
+
+        public CrearCadeteViewModel(string nombre, long telefono, string direccion)
+        {
+            Nombre = nombre;
+            Telefono = telefono;
+            Direccion = direccion;
+        }
     }
 
     public class EditarCadeteViewModel
@@ -62,7 +71,7 @@ namespace Cadeteria.ViewModels
 
         [Required]
         [DisplayName("Teléfono")]
-        public long Tel { get; set; }
+        public long Telefono { get; set; }
 
         [Required]
         [StringLength(80)]
@@ -77,7 +86,7 @@ namespace Cadeteria.ViewModels
         {
             ID = iD;
             Nombre = nombre;
-            Tel = tel;
+            Telefono = tel;
             Direccion = direccion;
         }
     }

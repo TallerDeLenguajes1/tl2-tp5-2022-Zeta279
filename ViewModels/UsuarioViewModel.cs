@@ -1,13 +1,9 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Cadeteria.Models;
 
 namespace Cadeteria.ViewModels
 {
-    public enum RolUsuario{
-        Administrador,
-        Encargado
-    }
-
     public class UsuarioViewModel
     {
         public int ID { get; set; }

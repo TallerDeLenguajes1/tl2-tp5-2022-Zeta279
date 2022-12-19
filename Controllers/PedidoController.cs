@@ -20,6 +20,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             ViewData["cadetes"] = CadeteRepo.ObtenerTodo();
             ViewData["clientes"] = ClienteRepo.ObtenerTodo();
 
@@ -29,6 +34,11 @@ namespace Cadeteria.Controllers
         [HttpPost]
         public ActionResult Index(int idCadete, int idCliente)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             List<PedidoViewModel> pedidosFiltrados = new();
             List<PedidoViewModel> pedidosCliente;
             List<PedidoViewModel> pedidosCadete;
@@ -70,6 +80,11 @@ namespace Cadeteria.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             ViewData["clientes"] = ClienteRepo.ObtenerTodo();
 
             return View();
@@ -78,6 +93,11 @@ namespace Cadeteria.Controllers
         [HttpPost]
         public ActionResult Create(CrearPedidoViewModel pedido)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             if (ModelState.IsValid)
             {
                 if (pedido.NuevoCliente)
@@ -106,6 +126,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Details(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             var pedido = PedidoRepo.Obtener(id);
             if (pedido is not null)
             {
@@ -116,6 +141,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Delete(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             if (PedidoRepo.Borrar(id))
             {
                 return RedirectToAction("Index");
@@ -125,6 +155,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Estado(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             var pedido = PedidoRepo.Obtener(id);
 
             if (pedido is not null && pedido.Estado == estado.EnCurso)
@@ -137,6 +172,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Asignar(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             var pedido = PedidoRepo.Obtener(id);
             ViewData["cadetes"] = CadeteRepo.ObtenerTodo();
 
@@ -149,6 +189,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Iniciar(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             var pedido = PedidoRepo.Obtener(id);
 
             if (pedido is not null && pedido.Estado == estado.Pendiente)
@@ -165,7 +210,12 @@ namespace Cadeteria.Controllers
         [HttpPost]
         public ActionResult Asignar(int idp, int idc)
         {
-            if(PedidoRepo.AsignarCadete(idp, idc))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
+            if (PedidoRepo.AsignarCadete(idp, idc))
             {
                 return RedirectToAction("Index");
             }
@@ -178,6 +228,11 @@ namespace Cadeteria.Controllers
 
         public ActionResult Error(string error)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
             ViewData["error"] = error;
 
             return View();

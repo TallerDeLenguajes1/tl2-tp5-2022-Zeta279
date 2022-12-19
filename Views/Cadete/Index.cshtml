@@ -25,10 +25,10 @@
                     @foreach (var cadete in Model)
                     {
                         <tr>
-                            <td>@cadete.nombre</td>
-                            <td>@cadete.direccion</td>
-                            <td>@cadete.telefono</td>
-                            <td><section class="table-botones"><a href="/Cadete/Edit/@cadete.CadeteId" class="cadete-editar">Editar</a><a href="/Cadete/Delete/@cadete.CadeteId" class="cadete-borrar">Borrar</a></section></td>
+                            <td>@cadete.Nombre</td>
+                            <td>@cadete.Direccion</td>
+                            <td>@cadete.Telefono</td>
+                            <td><section class="table-botones"><a href="/Cadete/Edit/@cadete.ID" class="cadete-editar">Editar</a><a href="/Cadete/Delete/@cadete.ID" class="cadete-borrar">Borrar</a></section></td>
                         </tr>
                     }
                 </tbody>

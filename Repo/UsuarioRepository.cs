@@ -1,11 +1,12 @@
 using Cadeteria.ViewModels;
+using Cadeteria.Models;
 using Microsoft.Data.Sqlite;
 
 namespace Cadeteria.Repo
 {
     public interface IUsuarioRepository
     {
-        UsuarioViewModel Logear(string usuario, string pass);
+        UsuarioModel Logear(string usuario, string pass);
     }
 
     public class UsuarioRepository: IUsuarioRepository
@@ -17,9 +18,9 @@ namespace Cadeteria.Repo
             ConnectionString = "Data Source=database/cadeteria.db";
         }
 
-        public UsuarioViewModel Logear(string usuario, string pass)
+        public UsuarioModel Logear(string usuario, string pass)
         {
-            UsuarioViewModel user = null;
+            UsuarioModel user = null;
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             SqliteCommand comando = new();

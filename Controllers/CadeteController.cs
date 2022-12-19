@@ -5,35 +5,51 @@ using Cadeteria.ViewModels;
 using Microsoft.Data.Sqlite;
 using Cadeteria.Repo;
 using Microsoft.AspNetCore.Session;
+using Cadeteria.Helper;
+using AutoMapper;
 
 namespace Cadeteria.Controllers
 {
     public class CadeteController : Controller
     {
         private readonly ICadeteRepository CadeteRepo;
+        private readonly IMapper mapper;
 
-        public CadeteController(ICadeteRepository cadeteRepo)
+        public CadeteController(ICadeteRepository cadeteRepo, IMapper map)
         {
-            
-
             CadeteRepo = cadeteRepo;
+            mapper = map;
         }
 
         // GET: CadeteController
         public ActionResult Index()
         {
-            return View(CadeteRepo.ObtenerTodo());
+            List<CadeteViewModel> cadetes = new List<CadeteViewModel>();
+
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
+            foreach(var cadete in CadeteRepo.ObtenerTodo())
+            {
+                cadetes.Add(mapper.Map<CadeteViewModel>(cadete));
+            }
+
+            return View(cadetes);
         }
 
         public ActionResult Sesion()
         {
-            
-
             return View();
         }
 
         public ActionResult Error(string error)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             ViewData["error"] = error;
             return View();
         }
@@ -41,6 +57,10 @@ namespace Cadeteria.Controllers
         // GET: CadeteController/Create
         public ActionResult Create()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             return View();
         }
 
@@ -48,9 +68,13 @@ namespace Cadeteria.Controllers
         [HttpPost]
         public ActionResult Create(CrearCadeteViewModel cadete)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             if (ModelState.IsValid)
             {
-                CadeteRepo.Crear(cadete.Nombre, cadete.Direccion, cadete.Tel.ToString());
+                CadeteRepo.Crear(mapper.Map<CadeteModel>(cadete));
                 return RedirectToAction("Index");
             }
             else
@@ -62,10 +86,14 @@ namespace Cadeteria.Controllers
         // GET: CadeteController/Edit/5
         public ActionResult Edit(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             var cadete = CadeteRepo.Obtener(id);
             if (cadete is not null)
             {
-                return View(new EditarCadeteViewModel(id, cadete.nombre, long.Parse(cadete.telefono), cadete.direccion));
+                return View(mapper.Map<EditarCadeteViewModel>(cadete));
             }
             else
             {
@@ -78,9 +106,13 @@ namespace Cadeteria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditarCadeteViewModel cadete)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             if (ModelState.IsValid)
             {
-                CadeteRepo.Actualizar(cadete.ID, cadete.Nombre, cadete.Direccion, cadete.Tel.ToString());
+                CadeteRepo.Actualizar(mapper.Map<CadeteModel>(cadete));
                 return RedirectToAction("Index");
             }
             else
@@ -93,6 +125,10 @@ namespace Cadeteria.Controllers
         // GET: CadeteController/Delete/5
         public ActionResult Delete(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             if (CadeteRepo.Borrar(id)) return RedirectToAction("Index");
             else return RedirectToAction("Error", new { error = "Ocurrió un error al intentar borrar el cadete" });
         }

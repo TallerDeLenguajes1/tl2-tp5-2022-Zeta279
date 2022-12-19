@@ -15,16 +15,28 @@ namespace Cadeteria.Controllers
 
         public IActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             return View();
         }
 
         public IActionResult Privacy()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             return View();
         }
 
         public IActionResult Restaurar()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
             return RedirectToAction("Index");
         }
 

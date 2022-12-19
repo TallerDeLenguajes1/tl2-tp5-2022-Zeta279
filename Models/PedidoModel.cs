@@ -23,6 +23,14 @@
             Estado = estado.SinAsignar;
         }
 
+        public PedidoModel(int nro, string det, int id, string nom, string direc, string tel, estado est)
+        {
+            Nro = nro;
+            Detalles = det;
+            cliente = new ClienteModel(id, nom, direc, tel);
+            Estado = est;
+        }
+
         public void AsignarCadete()
         {
             Estado = estado.Pendiente;

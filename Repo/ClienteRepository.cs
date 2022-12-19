@@ -1,4 +1,5 @@
-﻿using Cadeteria.ViewModels;
+﻿using Cadeteria.Models;
+using Cadeteria.ViewModels;
 using Microsoft.Data.Sqlite;
 using System.Reflection.PortableExecutable;
 
@@ -6,10 +7,10 @@ namespace Cadeteria.Repo
 {
     public interface IClienteRepository
     {
-        List<ClienteViewModel> ObtenerTodo();
-        ClienteViewModel Obtener(int id);
-        bool Crear(string nom, string direc, string tel);
-        bool Actualizar(int id, string nom, string direc, string tel);
+        List<ClienteModel> ObtenerTodo();
+        ClienteModel Obtener(int id);
+        bool Crear(ClienteModel cliente);
+        bool Actualizar(ClienteModel cliente);
         bool Borrar(int id);
     }
 
@@ -22,9 +23,9 @@ namespace Cadeteria.Repo
             ConnectionString = "Data Source=database/cadeteria.db";
         }
 
-        public List<ClienteViewModel> ObtenerTodo()
+        public List<ClienteModel> ObtenerTodo()
         {
-            List<ClienteViewModel> clientes = new();
+            List<ClienteModel> clientes = new();
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             SqliteCommand comando = new();
@@ -38,7 +39,7 @@ namespace Cadeteria.Repo
 
                 while (reader.Read())
                 {
-                    clientes.Add(new ClienteViewModel(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                    clientes.Add(new ClienteModel(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
                 }
             }
             catch (Exception ex)
@@ -51,9 +52,9 @@ namespace Cadeteria.Repo
             return clientes;
         }
 
-        public ClienteViewModel Obtener(int id)
+        public ClienteModel Obtener(int id)
         {
-            ClienteViewModel cliente = null;
+            ClienteModel cliente = null;
             SqliteConnection conexion = new(ConnectionString);
             conexion.Open();
             SqliteCommand comando = new();
@@ -68,7 +69,7 @@ namespace Cadeteria.Repo
 
                 if (reader.Read())
                 {
-                    cliente = new ClienteViewModel(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                    cliente = new ClienteModel(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
                 }
             }
             catch (Exception ex)
@@ -81,7 +82,7 @@ namespace Cadeteria.Repo
             return cliente;
         }
 
-        public bool Crear(string nom, string direc, string tel)
+        public bool Crear(ClienteModel cliente)
         {
             int resultado = 0, id;
 
@@ -110,10 +111,10 @@ namespace Cadeteria.Repo
                 // Ingresar cliente
                 reader.Close();
                 comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel);";
-                comando.Parameters.AddWithValue("id", id);
-                comando.Parameters.AddWithValue("$nom", nom);
-                comando.Parameters.AddWithValue("$direc", direc);
-                comando.Parameters.AddWithValue("$tel", tel);
+                comando.Parameters.AddWithValue("id", cliente.ID);
+                comando.Parameters.AddWithValue("$nom", cliente.Nombre);
+                comando.Parameters.AddWithValue("$direc", cliente.Direccion);
+                comando.Parameters.AddWithValue("$tel", cliente.Telefono);
 
                 resultado = comando.ExecuteNonQuery();
             }
@@ -127,7 +128,7 @@ namespace Cadeteria.Repo
             return resultado > 0;
         }
 
-        public bool Actualizar(int id, string nom, string direc, string tel)
+        public bool Actualizar(ClienteModel cliente)
         {
             int resultado = 0;
 
@@ -139,10 +140,10 @@ namespace Cadeteria.Repo
             {
                 comando.CommandText = "UPDATE cliente SET nombre = $nom, direccion = $direc, telefono = $tel WHERE id_cliente = $id";
                 comando.Connection = conexion;
-                comando.Parameters.AddWithValue("$nom", nom);
-                comando.Parameters.AddWithValue("$direc", direc);
-                comando.Parameters.AddWithValue("$tel", tel);
-                comando.Parameters.AddWithValue("$id", id);
+                comando.Parameters.AddWithValue("$nom", cliente.Nombre);
+                comando.Parameters.AddWithValue("$direc", cliente.Direccion);
+                comando.Parameters.AddWithValue("$tel", cliente.Telefono);
+                comando.Parameters.AddWithValue("$id", cliente.ID);
                 resultado = comando.ExecuteNonQuery();
             }
             catch (Exception ex)

@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Session;
 using Cadeteria.ViewModels;
+using Cadeteria.Models;
 using Cadeteria.Repo;
 
 namespace Cadeteria.Controllers
@@ -28,7 +24,7 @@ namespace Cadeteria.Controllers
 
         public ActionResult Verificar(string usuario, string pass)
         {
-            UsuarioViewModel user = UsuarioRepo.Logear(usuario, pass);
+            UsuarioModel user = UsuarioRepo.Logear(usuario, pass);
 
             if(user is not null)
             {

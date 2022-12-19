@@ -2,22 +2,22 @@
 {
     public class PersonaModel
     {
-        public int id { get; }
-        public string nombre { get; }
-        public string direccion { get; }
-        public string telefono { get; }
+        public int ID { get; set; }
+        public string Nombre { get; set; }
+        public string Direccion { get; set; }
+        public string Telefono { get; set; }
 
-        public PersonaModel(int id, string nombre, string direccion, string telefono)
+        public PersonaModel(int iD, string nombre, string direccion, string telefono)
         {
-            this.id = id;
-            this.nombre = nombre;
-            this.direccion = direccion;
-            this.telefono = telefono;
+            ID = iD;
+            Nombre = nombre;
+            Direccion = direccion;
+            Telefono = telefono;
         }
 
         public override string ToString()
         {
-            return $"ID: {id}\nNombre: {nombre}\nDireccion: {direccion}\nTelefono: {telefono}";
+            return $"ID: {ID}\nNombre: {Nombre}\nDireccion: {Direccion}\nTelefono: {Telefono}";
         }
     }
 }
