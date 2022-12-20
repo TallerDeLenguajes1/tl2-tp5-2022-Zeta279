@@ -4,7 +4,10 @@
 
 <h1>Cadetería</h1>
 <section id="seleccion-principal">
-    <a id="selec-cadetes" asp-controller="Cadete" asp-action="Index">Cadetes<img src="~/img/cadete.png"></a>
+    @if(Context.Session.GetInt32("rol") == 1)
+    {
+        <a id="selec-cadetes" asp-controller="Cadete" asp-action="Index">Cadetes<img src="~/img/cadete.png"></a>
+        <a id="selec-clientes" asp-controller="Cliente" asp-action="Index">Clientes<img src="~/img/cliente.png"></a>
+    }
     <a id="selec-pedidos" asp-controller="Pedido" asp-action="Index">Pedidos<img src="~/img/pedido.png"></a>
-    <a id="selec-clientes" asp-controller="Cliente" asp-action="Index">Clientes<img src="~/img/cliente.png"></a>
-</section>
+    </section>

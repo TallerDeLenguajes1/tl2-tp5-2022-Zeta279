@@ -1,9 +1,10 @@
 @{
     ViewData["Title"] = "Sesiones";
 }
+@using Microsoft.AspNetCore.Http
 
 <h1>Sesiones</h1>
 <section id="sesiones">
-    <p>@ViewData["name"]</p>
-    <p>@ViewData["rol"]</p>
+    <p><strong>Username:</strong> @Context.Session.GetString("name")</p>
+    <p><strong>Rol:</strong> @Context.Session.GetInt32("rol")</p>
 </section>

@@ -51,6 +51,11 @@ namespace Cadeteria.ViewModels
         [DisplayName("Dirección")]
         public string Direccion { get; set; }
 
+        public CrearCadeteViewModel()
+        {
+
+        }
+
         public CrearCadeteViewModel(string nombre, long telefono, string direccion)
         {
             Nombre = nombre;

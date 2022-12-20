@@ -1,5 +1,4 @@
 using Cadeteria.Repo;
-using Microsoft.AspNetCore.Session;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -3,27 +3,42 @@ using Microsoft.AspNetCore.Mvc;
 using Cadeteria.Models;
 using Cadeteria.ViewModels;
 using Cadeteria.Repo;
+using AutoMapper;
 
 namespace Cadeteria.Controllers
 {
     public class ClienteController : Controller
     {
         private readonly IClienteRepository ClienteRepo;
+        private readonly IMapper mapper;
 
-        public ClienteController(IClienteRepository clienteRepo)
+        public ClienteController(IClienteRepository clienteRepo, IMapper map)
         {
             ClienteRepo = clienteRepo;
+            mapper = map;
         }
 
         // GET: ClienteController
         public ActionResult Index()
         {
+            var clientes = new List<ClienteViewModel>();
+
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
             {
                 return RedirectToAction("Index", "Logging");
             }
 
-            return View(ClienteRepo.ObtenerTodo());
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var cliente in ClienteRepo.ObtenerTodo())
+            {
+                clientes.Add(mapper.Map<ClienteViewModel>(cliente));
+            }
+
+            return View(clientes);
         }
 
         // GET: ClienteController/Create
@@ -32,6 +47,11 @@ namespace Cadeteria.Controllers
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
             {
                 return RedirectToAction("Index", "Logging");
+            }
+
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
@@ -47,7 +67,12 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
-            if (ModelState.IsValid && ClienteRepo.Crear(cliente.Nombre, cliente.Direccion, cliente.Telefono))
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (ModelState.IsValid && ClienteRepo.Crear(mapper.Map<ClienteModel>(cliente)))
             {
                 return RedirectToAction("Index");
             }
@@ -65,11 +90,16 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var cliente = ClienteRepo.Obtener(id);
 
             if (cliente is not null)
             {
-                return View(cliente);
+                return View(mapper.Map<EditarClienteViewModel>(cliente));
             }
             else
             {
@@ -87,9 +117,14 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
-                ClienteRepo.Actualizar(cliente.ID, cliente.Nombre, cliente.Direccion, cliente.Telefono);
+                ClienteRepo.Actualizar(mapper.Map<ClienteModel>(cliente));
                 return RedirectToAction("Index");
             }
             else
@@ -106,6 +141,11 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ClienteRepo.Borrar(id)) return RedirectToAction("Index");
             else return RedirectToAction("Error", new { error = "Ocurrió un error al intentar borrar el cliente" });
         }
@@ -115,6 +155,11 @@ namespace Cadeteria.Controllers
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
             {
                 return RedirectToAction("Index", "Logging");
+            }
+
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
             }
 
             ViewData["error"] = error;

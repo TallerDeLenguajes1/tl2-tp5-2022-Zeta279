@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cadeteria.Models;
 using Cadeteria.ViewModels;
+using Cadeteria.Repo;
 
 namespace Cadeteria
 {
@@ -8,19 +9,27 @@ namespace Cadeteria
     {
         public PerfilMapeo()
         {
+            // Repositorios
+            CadeteRepository cadeteRepo = new();
+            ClienteRepository clienteRepo = new();
+
             // Cadetes
-            CreateMap<CadeteViewModel, CadeteModel>();
-            CreateMap<EditarCadeteViewModel, CadeteModel>();
-            CreateMap<CadeteModel, CadeteViewModel>();
+            CreateMap<CadeteViewModel, CadeteModel>().ReverseMap();
+            CreateMap<EditarCadeteViewModel, CadeteModel>().ReverseMap();
+            CreateMap<CrearCadeteViewModel, CadeteModel>();
 
             // Pedidos
-            CreateMap<PedidoModel, PedidoViewModel>();
-            CreateMap<CrearPedidoViewModel, PedidoModel>();
-            CreateMap<PedidoViewModel, PedidoModel>();
+            CreateMap<PedidoModel, PedidoViewModel>().ReverseMap();
+            CreateMap<CrearPedidoViewModel, PedidoModel>()
+                .ForPath(dest => dest.Cliente.ID, opt => opt.MapFrom(opt => opt.ClienteID))
+                .ForPath(dest => dest.Cliente.Nombre, opt => opt.MapFrom(opt => opt.ClienteNombre))
+                .ForPath(dest => dest.Cliente.Direccion, opt => opt.MapFrom(opt => opt.ClienteDireccion))
+                .ForPath(dest => dest.Cliente.Telefono, opt => opt.MapFrom(opt => opt.ClienteTelefono));
+
 
             // Clientes
-            CreateMap<ClienteModel, ClienteViewModel>();
-            CreateMap<ClienteViewModel, ClienteModel>();
+            CreateMap<ClienteModel, ClienteViewModel>().ReverseMap();
+            CreateMap<EditarClienteViewModel, ClienteModel>().ReverseMap();
             CreateMap<CrearClienteViewModel, ClienteModel>();
         }
     }

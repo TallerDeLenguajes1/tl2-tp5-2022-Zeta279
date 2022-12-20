@@ -2,6 +2,7 @@
 using Cadeteria.Models;
 using Cadeteria.ViewModels;
 using Cadeteria.Repo;
+using AutoMapper;
 
 namespace Cadeteria.Controllers
 {
@@ -10,12 +11,14 @@ namespace Cadeteria.Controllers
         private readonly IPedidoRepository PedidoRepo;
         private readonly ICadeteRepository CadeteRepo;
         private readonly IClienteRepository ClienteRepo;
+        private readonly IMapper mapper;
 
-        public PedidoController(IPedidoRepository pedidoRepo, ICadeteRepository cadeteRepo, IClienteRepository clienteRepo)
+        public PedidoController(IPedidoRepository pedidoRepo, ICadeteRepository cadeteRepo, IClienteRepository clienteRepo, IMapper map)
         {
             PedidoRepo = pedidoRepo;
             CadeteRepo = cadeteRepo;
             ClienteRepo = clienteRepo;
+            mapper = map;
         }
 
         public ActionResult Index()
@@ -25,10 +28,18 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
-            ViewData["cadetes"] = CadeteRepo.ObtenerTodo();
-            ViewData["clientes"] = ClienteRepo.ObtenerTodo();
+            // Utilizados para filtrar
+            ViewData["clientes"] = mapper.Map<List<ClienteViewModel>>(ClienteRepo.ObtenerTodo());
+            ViewData["cadetes"] = mapper.Map<List<CadeteViewModel>>(CadeteRepo.ObtenerTodo());
 
-            return View(PedidoRepo.ObtenerTodo());
+            if(HttpContext.Session.GetInt32("rol") == 2)
+            {
+                return View(mapper.Map<List<PedidoViewModel>>(PedidoRepo.ObtenerPorCadete((int)HttpContext.Session.GetInt32("id_cadete"))));
+            }
+            else
+            {
+                return View(mapper.Map<List<PedidoViewModel>>(PedidoRepo.ObtenerTodo()));
+            }
         }
 
         [HttpPost]
@@ -39,15 +50,21 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
-            List<PedidoViewModel> pedidosFiltrados = new();
-            List<PedidoViewModel> pedidosCliente;
-            List<PedidoViewModel> pedidosCadete;
-            ViewData["cadetes"] = CadeteRepo.ObtenerTodo();
-            ViewData["clientes"] = ClienteRepo.ObtenerTodo();
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["clientes"] = mapper.Map<List<ClienteViewModel>>(ClienteRepo.ObtenerTodo());
+            ViewData["cadetes"] = mapper.Map<List<CadeteViewModel>>(CadeteRepo.ObtenerTodo());
+
+            List<PedidoModel> pedidosFiltrados = new();
+            List<PedidoModel> pedidosCliente;
+            List<PedidoModel> pedidosCadete;
 
             if (idCadete == 0 && idCliente == 0)
             {
-                return View(PedidoRepo.ObtenerTodo());
+                return RedirectToAction("Index");
             }
             else
             {
@@ -74,7 +91,7 @@ namespace Cadeteria.Controllers
                 }
             }
             
-            return View(pedidosFiltrados);
+            return View(mapper.Map<List<PedidoViewModel>>(pedidosFiltrados));
         }
 
         [HttpGet]
@@ -85,7 +102,12 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
-            ViewData["clientes"] = ClienteRepo.ObtenerTodo();
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["clientes"] = mapper.Map<List<ClienteViewModel>>(ClienteRepo.ObtenerTodo());
 
             return View();
         }
@@ -98,13 +120,18 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 if (pedido.NuevoCliente)
                 {
-                    if (pedido.NombreCliente != null && pedido.DireccionCliente != null && pedido.TelefonoCliente != null)
+                    if (pedido.ClienteNombre != null && pedido.ClienteDireccion != null && pedido.ClienteTelefono != null)
                     {
-                        PedidoRepo.CrearPedidoConCliente(pedido.Detalles, pedido.NombreCliente, pedido.DireccionCliente, pedido.TelefonoCliente);
+                        PedidoRepo.CrearPedidoConCliente(mapper.Map<PedidoModel>(pedido));
                     }
                     else
                     {
@@ -113,7 +140,7 @@ namespace Cadeteria.Controllers
                 }
                 else
                 {
-                    PedidoRepo.Crear(pedido.Detalles, pedido.IDCliente);
+                    PedidoRepo.Crear(mapper.Map<PedidoModel>(pedido));
                 }
                 return RedirectToAction("Index");
                 
@@ -132,10 +159,12 @@ namespace Cadeteria.Controllers
             }
 
             var pedido = PedidoRepo.Obtener(id);
+
             if (pedido is not null)
             {
-                return View(pedido);
+                return View(mapper.Map<PedidoViewModel>(pedido));
             }
+
             return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
         }
 
@@ -146,10 +175,16 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (PedidoRepo.Borrar(id))
             {
                 return RedirectToAction("Index");
             }
+
             else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
         }
 
@@ -177,14 +212,43 @@ namespace Cadeteria.Controllers
                 return RedirectToAction("Index", "Logging");
             }
 
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var pedido = PedidoRepo.Obtener(id);
-            ViewData["cadetes"] = CadeteRepo.ObtenerTodo();
+            ViewData["cadetes"] = mapper.Map<List<CadeteViewModel>>(CadeteRepo.ObtenerTodo());
 
             if (pedido is not null)
             {
-                return View(pedido);
+                return View(mapper.Map<PedidoViewModel>(pedido));
             }
+
             else return RedirectToAction("Error", new { error = "No se ha encontrado el pedido solicitado" });
+        }
+
+        [HttpPost]
+        public ActionResult Asignar(int idp, int idc)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
+            {
+                return RedirectToAction("Index", "Logging");
+            }
+
+            if (HttpContext.Session.GetInt32("rol") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (PedidoRepo.AsignarCadete(idp, idc))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Error", new { error = "No se ha podido asignar el pedido" });
+            }
         }
 
         public ActionResult Iniciar(int id)
@@ -205,25 +269,6 @@ namespace Cadeteria.Controllers
             {
                 return RedirectToAction("Error", new { error = "No se ha podido iniciar el pedido" });
             }
-        }
-
-        [HttpPost]
-        public ActionResult Asignar(int idp, int idc)
-        {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("name")))
-            {
-                return RedirectToAction("Index", "Logging");
-            }
-
-            if (PedidoRepo.AsignarCadete(idp, idc))
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return RedirectToAction("Error", new { error = "No se ha podido asignar el pedido" });
-            }
-
         }
 
         public ActionResult Error(string error)

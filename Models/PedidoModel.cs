@@ -10,50 +10,24 @@
 
     public class PedidoModel
     {
-        public int Nro { get; }
-        public string Detalles { get; }
-        public ClienteModel cliente { get; }
-        public estado Estado { get; private set; }
+        public int Nro { get; set; }
+        public string Detalles { get; set; }
+        public ClienteModel Cliente { get; set; }
+        public CadeteModel Cadete { get; set; }
+        public estado Estado { get; set; }
 
-        public PedidoModel(int nro, string det, int id, string nom, string direc, string tel)
+        public PedidoModel()
         {
-            Nro = nro;
-            Detalles = det;
-            cliente = new ClienteModel(id, nom, direc, tel);
-            Estado = estado.SinAsignar;
+
         }
 
-        public PedidoModel(int nro, string det, int id, string nom, string direc, string tel, estado est)
+        public PedidoModel(int nro, string det, ClienteModel cliente, CadeteModel cadete = null, estado est = estado.SinAsignar)
         {
             Nro = nro;
             Detalles = det;
-            cliente = new ClienteModel(id, nom, direc, tel);
+            Cliente = cliente;
+            Cadete = cadete;
             Estado = est;
-        }
-
-        public void AsignarCadete()
-        {
-            Estado = estado.Pendiente;
-        }
-
-        public void IniciarPedido()
-        {
-            Estado = estado.EnCurso;
-        }
-
-        public void EntregarPedido()
-        {
-            Estado = estado.Entregado;
-        }
-
-        public bool FueEntregado()
-        {
-            return Estado == estado.Entregado;
-        }
-
-        public bool EstaEnCurso()
-        {
-            return Estado == estado.EnCurso;
         }
 
         public override string ToString()
@@ -61,7 +35,7 @@
             string curso;
             if (Estado == estado.EnCurso) curso = "Si";
             else curso = "No";
-            return $"Número: {Nro}\nDetalles: {Detalles}\nEn curso: {curso}\nCliente: \n{cliente}";
+            return $"Número: {Nro}\nDetalles: {Detalles}\nEn curso: {curso}\nCliente: \n{Cliente}";
         }
 
         public static bool operator ==(PedidoModel ped1, PedidoModel ped2)

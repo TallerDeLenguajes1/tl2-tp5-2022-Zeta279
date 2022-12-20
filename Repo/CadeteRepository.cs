@@ -109,7 +109,7 @@ namespace Cadeteria.Repo
                 // Ingresar cadete
                 reader.Close();
                 comando.CommandText = "INSERT INTO cadete VALUES ($id, $nom, $direc, $tel, 1);";
-                comando.Parameters.AddWithValue("id", cadete.ID);
+                comando.Parameters.AddWithValue("id", id);
                 comando.Parameters.AddWithValue("$nom", cadete.Nombre);
                 comando.Parameters.AddWithValue("$direc", cadete.Direccion);
                 comando.Parameters.AddWithValue("$tel", cadete.Telefono);

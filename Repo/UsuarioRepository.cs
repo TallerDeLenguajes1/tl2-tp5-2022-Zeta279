@@ -21,6 +21,7 @@ namespace Cadeteria.Repo
         public UsuarioModel Logear(string usuario, string pass)
         {
             UsuarioModel user = null;
+            int idCadete = 0;
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             SqliteCommand comando = new();
@@ -36,14 +37,19 @@ namespace Cadeteria.Repo
 
                 if(reader.Read() && !reader.IsDBNull(0))
                 {
-                    if(reader.GetString(4) == "Administrador")
+                    if (!reader.IsDBNull(5))
                     {
-                        user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Administrador);
+                        idCadete = reader.GetInt32(5);
                     }
-                    if(reader.GetString(4) == "Encargado")
+                    if (reader.GetString(4) == "Administrador")
                     {
-                        user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Encargado);
+                        user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Administrador, idCadete);
                     }
+                    if (reader.GetString(4) == "Cadete")
+                    {
+                        user = new(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), RolUsuario.Cadete, idCadete);
+                    }
+                    
                 }
                 
             }

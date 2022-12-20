@@ -34,11 +34,12 @@ namespace Cadeteria.Controllers
                 {
                     HttpContext.Session.SetInt32("rol", 1);
                 }
-                if(user.Rol == RolUsuario.Encargado)
+                if(user.Rol == RolUsuario.Cadete)
                 {
-                    /* Lo mismo que el administrador, salvo dar de alta pedidos y modificar pedidos */
                     HttpContext.Session.SetInt32("rol", 2);
                 }
+
+                HttpContext.Session.SetInt32("id_cadete", user.IDCadete);
 
                 return RedirectToAction("Index", "Cadete");
             }
@@ -46,6 +47,12 @@ namespace Cadeteria.Controllers
             {
                 return RedirectToAction("Error", new { error = "No se ha encontrado el usuario ingresado" });
             }
+        }
+
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
         }
 
         public ActionResult Error(string error)

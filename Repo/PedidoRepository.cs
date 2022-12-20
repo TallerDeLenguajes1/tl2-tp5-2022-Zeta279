@@ -6,12 +6,12 @@ namespace Cadeteria.Repo
 {
     public interface IPedidoRepository
     {
-        List<PedidoViewModel> ObtenerTodo();
-        PedidoViewModel Obtener(int id);
-        List<PedidoViewModel> ObtenerPorCadete(int id);
-        List<PedidoViewModel> ObtenerPorCliente(int id);
-        bool Crear(string det, int idc);
-        bool CrearPedidoConCliente(string det, string nom, string direc, string tel);
+        List<PedidoModel> ObtenerTodo();
+        PedidoModel Obtener(int id);
+        List<PedidoModel> ObtenerPorCadete(int id);
+        List<PedidoModel> ObtenerPorCliente(int id);
+        bool Crear(PedidoModel pedido);
+        bool CrearPedidoConCliente(PedidoModel pedido);
         bool Borrar(int id);
         bool AsignarCadete(int idPedido, int idCadete);
         bool CambiarEstado(int id, estado estado);
@@ -27,10 +27,11 @@ namespace Cadeteria.Repo
             ConnectionString = "Data Source=database/cadeteria.db";
         }
 
-        public List<PedidoViewModel> ObtenerTodo()
+        public List<PedidoModel> ObtenerTodo()
         {
-            List<PedidoViewModel> pedidos = new();
+            List<PedidoModel> pedidos = new();
             CadeteRepository cadeteRepo = new();
+            ClienteRepository clienteRepo = new();
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
@@ -40,12 +41,20 @@ namespace Cadeteria.Repo
 
             try
             {
-                comando.CommandText = "SELECT * FROM pedido INNER JOIN cliente USING (id_cliente);";
+                comando.CommandText = "SELECT * FROM pedido;";
                 reader = comando.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    pedidos.Add(new PedidoViewModel(reader.GetInt32(0), reader.GetString(1), new ClienteViewModel(reader.GetInt32(3), reader.GetString(5), reader.GetString(6), reader.GetString(7))));
+                    if (reader.IsDBNull(4))
+                    {
+                        pedidos.Add(new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3))));
+                    }
+                    else
+                    {
+                        pedidos.Add(new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3)), cadeteRepo.Obtener(reader.GetInt32(4))));
+                    }
+
                     if (reader.GetString(2) == "Pendiente")
                     {
                         pedidos[pedidos.Count - 1].Estado = estado.Pendiente;
@@ -57,11 +66,6 @@ namespace Cadeteria.Repo
                     if (reader.GetString(2) == "Entregado")
                     {
                         pedidos[pedidos.Count - 1].Estado = estado.Entregado;
-                    }
-
-                    if (!reader.IsDBNull(4))
-                    {
-                        pedidos[pedidos.Count - 1].IngresarCadete(cadeteRepo.Obtener(reader.GetInt32(4)).nombre);
                     }
                 }
             }
@@ -75,10 +79,11 @@ namespace Cadeteria.Repo
             return pedidos;
         }
 
-        public PedidoViewModel Obtener(int id)
+        public PedidoModel Obtener(int id)
         {
-            PedidoViewModel pedido = null;
+            PedidoModel pedido = null;
             CadeteRepository cadeteRepo = new();
+            ClienteRepository clienteRepo = new();
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
@@ -88,13 +93,21 @@ namespace Cadeteria.Repo
 
             try
             {
-                comando.CommandText = "SELECT * FROM pedido INNER JOIN cliente USING (id_cliente) WHERE id_pedido = $id;";
+                comando.CommandText = "SELECT * FROM pedido WHERE id_pedido = $id;";
                 comando.Parameters.AddWithValue("$id", id);
                 reader = comando.ExecuteReader();
 
                 if (reader.Read())
                 {
-                    pedido = new PedidoViewModel(reader.GetInt32(0), reader.GetString(1), new ClienteViewModel(reader.GetInt32(3), reader.GetString(5), reader.GetString(6), reader.GetString(7)));
+                    if (reader.IsDBNull(4))
+                    {
+                        pedido = new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3)));
+                    }
+                    else
+                    {
+                        pedido = new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3)), cadeteRepo.Obtener(reader.GetInt32(4)));
+                    }
+
                     if (reader.GetString(2) == "Pendiente")
                     {
                         pedido.Estado = estado.Pendiente;
@@ -106,11 +119,6 @@ namespace Cadeteria.Repo
                     if (reader.GetString(2) == "Entregado")
                     {
                         pedido.Estado = estado.Entregado;
-                    }
-
-                    if (!reader.IsDBNull(4))
-                    {
-                        pedido.IngresarCadete(cadeteRepo.Obtener(reader.GetInt32(4)).nombre);
                     }
                 }
             }
@@ -124,10 +132,11 @@ namespace Cadeteria.Repo
             return pedido;
         }
 
-        public List<PedidoViewModel> ObtenerPorCadete(int id)
+        public List<PedidoModel> ObtenerPorCadete(int id)
         {
-            List<PedidoViewModel> pedidos = new();
+            List<PedidoModel> pedidos = new();
             CadeteRepository cadeteRepo = new();
+            ClienteRepository clienteRepo = new();
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
@@ -137,13 +146,13 @@ namespace Cadeteria.Repo
 
             try
             {
-                comando.CommandText = "SELECT * FROM pedido INNER JOIN cliente USING (id_cliente) WHERE id_cadete = $id;";
+                comando.CommandText = "SELECT * FROM pedido WHERE id_cadete = $id;";
                 comando.Parameters.AddWithValue("$id", id);
                 reader = comando.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    pedidos.Add(new PedidoViewModel(reader.GetInt32(0), reader.GetString(1), new ClienteViewModel(reader.GetInt32(3), reader.GetString(5), reader.GetString(6), reader.GetString(7))));
+                    pedidos.Add(new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3)), cadeteRepo.Obtener(reader.GetInt32(4))));
                     if (reader.GetString(2) == "Pendiente")
                     {
                         pedidos[pedidos.Count - 1].Estado = estado.Pendiente;
@@ -155,11 +164,6 @@ namespace Cadeteria.Repo
                     if (reader.GetString(2) == "Entregado")
                     {
                         pedidos[pedidos.Count - 1].Estado = estado.Entregado;
-                    }
-
-                    if (!reader.IsDBNull(4))
-                    {
-                        pedidos[pedidos.Count - 1].IngresarCadete(cadeteRepo.Obtener(reader.GetInt32(4)).nombre);
                     }
                 }
             }
@@ -173,10 +177,11 @@ namespace Cadeteria.Repo
             return pedidos;
         }
 
-        public List<PedidoViewModel> ObtenerPorCliente(int id)
+        public List<PedidoModel> ObtenerPorCliente(int id)
         {
-            List<PedidoViewModel> pedidos = new();
+            List<PedidoModel> pedidos = new();
             CadeteRepository cadeteRepo = new();
+            ClienteRepository clienteRepo = new();
 
             SqliteConnection conexion = new SqliteConnection(ConnectionString);
             conexion.Open();
@@ -186,13 +191,21 @@ namespace Cadeteria.Repo
 
             try
             {
-                comando.CommandText = "SELECT * FROM pedido INNER JOIN cliente USING (id_cliente) WHERE id_cliente = $id;";
+                comando.CommandText = "SELECT * FROM pedido WHERE id_cliente = $id;";
                 comando.Parameters.AddWithValue("$id", id);
                 reader = comando.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    pedidos.Add(new PedidoViewModel(reader.GetInt32(0), reader.GetString(1), new ClienteViewModel(reader.GetInt32(3), reader.GetString(5), reader.GetString(6), reader.GetString(7))));
+                    if (reader.IsDBNull(4))
+                    {
+                        pedidos.Add(new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3))));
+                    }
+                    else
+                    {
+                        pedidos.Add(new PedidoModel(reader.GetInt32(0), reader.GetString(1), clienteRepo.Obtener(reader.GetInt32(3)), cadeteRepo.Obtener(reader.GetInt32(4))));
+                    }
+
                     if (reader.GetString(2) == "Pendiente")
                     {
                         pedidos[pedidos.Count - 1].Estado = estado.Pendiente;
@@ -204,11 +217,6 @@ namespace Cadeteria.Repo
                     if (reader.GetString(2) == "Entregado")
                     {
                         pedidos[pedidos.Count - 1].Estado = estado.Entregado;
-                    }
-
-                    if (!reader.IsDBNull(4))
-                    {
-                        pedidos[pedidos.Count - 1].IngresarCadete(cadeteRepo.Obtener(reader.GetInt32(4)).nombre);
                     }
                 }
             }
@@ -222,7 +230,7 @@ namespace Cadeteria.Repo
             return pedidos;
         }
 
-        public bool Crear(string det, int idc)
+        public bool Crear(PedidoModel pedido)
         {
             int resultado = 0, id;
 
@@ -252,8 +260,8 @@ namespace Cadeteria.Repo
                 reader.Close();
                 comando.CommandText = "INSERT INTO pedido VALUES ($id, $det, 'SinAsignar', $id_c, null)";
                 comando.Parameters.AddWithValue("$id", id);
-                comando.Parameters.AddWithValue("$det", det);
-                comando.Parameters.AddWithValue("$id_c", idc);
+                comando.Parameters.AddWithValue("$det", pedido.Detalles);
+                comando.Parameters.AddWithValue("$id_c", pedido.Cliente.ID);
                 resultado = comando.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -266,7 +274,7 @@ namespace Cadeteria.Repo
             return resultado > 0;
         }
 
-        public bool CrearPedidoConCliente(string det, string nom, string direc, string tel)
+        public bool CrearPedidoConCliente(PedidoModel pedido)
         {
             int resultado = 0, idp, idc;
 
@@ -311,9 +319,9 @@ namespace Cadeteria.Repo
                 reader.Close();
                 comando.CommandText = "INSERT INTO cliente VALUES ($idc, $nom, $direc, $tel)";
                 comando.Parameters.AddWithValue("$idc", idc);
-                comando.Parameters.AddWithValue("nom", nom);
-                comando.Parameters.AddWithValue("$direc", direc);
-                comando.Parameters.AddWithValue("$tel", tel);
+                comando.Parameters.AddWithValue("nom", pedido.Cliente.Nombre);
+                comando.Parameters.AddWithValue("$direc", pedido.Cliente.Direccion);
+                comando.Parameters.AddWithValue("$tel", pedido.Cliente.Telefono);
                 comando.ExecuteNonQuery();
 
                 // Ingresar pedido
@@ -321,7 +329,7 @@ namespace Cadeteria.Repo
                 comando.CommandText = "INSERT INTO pedido VALUES ($idp, $det, 'SinAsignar', $idc, null)";
                 comando.Parameters.Clear();
                 comando.Parameters.AddWithValue("$idp", idp);
-                comando.Parameters.AddWithValue("$det", det);
+                comando.Parameters.AddWithValue("$det", pedido.Detalles);
                 comando.Parameters.AddWithValue("$idc", idc);
                 resultado = comando.ExecuteNonQuery();
             }

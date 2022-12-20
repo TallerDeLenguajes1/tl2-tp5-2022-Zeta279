@@ -7,10 +7,10 @@ namespace Cadeteria.ViewModels
 {
     public class PedidoViewModel
     {
-        public int NumPedido { get; set; }
+        public int Nro { get; set; }
         public string Detalles { get; set; }
         public ClienteViewModel Cliente { get; set; }
-        public string NombreCadete {get; set;}
+        public CadeteViewModel Cadete { get; set; }
         public estado Estado { get; set; }
 
         public PedidoViewModel()
@@ -18,18 +18,13 @@ namespace Cadeteria.ViewModels
 
         }
 
-        public PedidoViewModel(int num, string detalles, ClienteViewModel cliente, estado estado = estado.SinAsignar)
+        public PedidoViewModel(int num, string detalles, ClienteViewModel cliente, CadeteViewModel cadete = null, estado estado = estado.SinAsignar)
         {
-            NumPedido = num;
+            Nro = num;
             Detalles = detalles;
             Cliente = cliente;
             Estado = estado;
-            NombreCadete = null;
-        }
-
-        public void IngresarCadete(string nombre)
-        {
-            NombreCadete = nombre;
+            Cadete = cadete;
         }
 
         public string ObtenerEstado()
@@ -43,12 +38,12 @@ namespace Cadeteria.ViewModels
 
         static public bool operator ==(PedidoViewModel ped1, PedidoViewModel ped2)
         {
-            return ped1.NumPedido == ped2.NumPedido;
+            return ped1.Nro == ped2.Nro;
         }
 
         static public bool operator !=(PedidoViewModel ped1, PedidoViewModel ped2)
         {
-            return ped1.NumPedido != ped2.NumPedido;
+            return ped1.Nro != ped2.Nro;
         }
     }
 
@@ -60,21 +55,21 @@ namespace Cadeteria.ViewModels
 
         [Required]
         [DisplayName("ID")]
-        public int IDCliente { get; set; }
+        public int ClienteID { get; set; }
 
         public bool NuevoCliente { get; set; }
 
         [AllowNull]
         [DisplayName("Nombre")]
-        public string? NombreCliente { get; set; }
+        public string? ClienteNombre { get; set; }
 
         [AllowNull]
         [DisplayName("Dirección")]
-        public string? DireccionCliente { get; set; }
+        public string? ClienteDireccion { get; set; }
 
         [AllowNull]
         [DisplayName("Teléfono")]
-        public string? TelefonoCliente { get; set; }
+        public string? ClienteTelefono { get; set; }
 
         public CrearPedidoViewModel()
         {
@@ -84,7 +79,7 @@ namespace Cadeteria.ViewModels
         public CrearPedidoViewModel(string detalles, int id)
         {
             Detalles = detalles;
-            IDCliente = id;
+            ClienteID = id;
         }
     }
 }

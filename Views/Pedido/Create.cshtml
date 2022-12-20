@@ -19,10 +19,10 @@
 
         <!-- Cliente existente -->
         <section id="selec-cliente">
-        <label asp-for="@Model.IDCliente">Seleccionar</label>
+        <label asp-for="@Model.ClienteID">Seleccionar</label>
         @if(((List<ClienteViewModel>)ViewData["clientes"]).Count > 0)
         {
-            <select asp-for="@Model.IDCliente">
+            <select asp-for="@Model.ClienteID">
                     @foreach (var cliente in (List<ClienteViewModel>)ViewData["clientes"])
                 {
                     <option value="@cliente.ID">@cliente.Nombre</option>
@@ -37,14 +37,14 @@
 
         <!-- Cliente nuevo -->
         <section id="nuevo-cliente">
-            <label asp-for="@Model.NombreCliente"></label>
-            <input asp-for="@Model.NombreCliente">
+            <label asp-for="@Model.ClienteNombre"></label>
+            <input asp-for="@Model.ClienteNombre">
 
-            <label asp-for="@Model.DireccionCliente"></label>
-            <input asp-for="@Model.DireccionCliente">
+            <label asp-for="@Model.ClienteDireccion"></label>
+            <input asp-for="@Model.ClienteDireccion">
 
-            <label asp-for="@Model.TelefonoCliente"></label>
-            <input asp-for="@Model.TelefonoCliente">
+            <label asp-for="@Model.ClienteTelefono"></label>
+            <input asp-for="@Model.ClienteTelefono">
         </section>
         <button>Ingresar</button>
     </form>

@@ -3,13 +3,17 @@
 }
 
 @model List<Cadeteria.ViewModels.PedidoViewModel>
+@using Microsoft.AspNetCore.Http
 
 <h1>Pedidos</h1>
 
 <section id="pedido-index">
     <section id="manejo-pedidos">
         <section class="crear">
+        @if(Context.Session.GetInt32("rol") == 1)
+        {
             <a asp-controller="Pedido" asp-action="Create">+</a>
+        }
         </section>
         <a href="#" id="filtrar" onclick="filtrosPedidos()">Filtrar</a>
     </section>
@@ -21,7 +25,7 @@
                 <option value="0">Cualquier cadete</option>
                 @foreach(var cadete in (List<Cadeteria.ViewModels.CadeteViewModel>)ViewData["cadetes"])
                 {
-                    <option value="@cadete.CadeteId">@cadete.nombre</option>
+                    <option value="@cadete.ID">@cadete.Nombre</option>
                 }
             </select>
             </label>
@@ -55,34 +59,42 @@
                         <tr>
                             <td>@pedido.Detalles</td>
                             <td>@pedido.ObtenerEstado()</td>
-                            @if (pedido.NombreCadete == null)
+                            @if (pedido.Cadete is null)
                             {
                                 <td>-</td>
                             }
                             else
                             {
-                                <td>@pedido.NombreCadete</td>
+                                <td>@pedido.Cadete.Nombre</td>
                             }
 
                             <td>
                                 <section class="table-botones">
-                                    @if (pedido.Estado == estado.SinAsignar)
+                                    @if (pedido.Estado == estado.SinAsignar && Context.Session.GetInt32("rol") == 1)
                                     {
-                                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Asignar</a>
+                                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.Nro" class="pedido-asignar">Asignar</a>
                                     }
                                     @if (pedido.Estado == estado.Pendiente)
                                     {
-                                        <a asp-controller="Pedido" asp-action="Iniciar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Iniciar Pedido</a>
-                                        <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.NumPedido" class="pedido-asignar">Reasignar</a>
+                                        <a asp-controller="Pedido" asp-action="Iniciar" asp-route-id="@pedido.Nro" class="pedido-asignar">Iniciar Pedido</a>
+                                        @if (Context.Session.GetInt32("rol") == 1)
+                                        {
+                                            <a asp-controller="Pedido" asp-action="Asignar" asp-route-id="@pedido.Nro" class="pedido-asignar">Reasignar</a>
+                                        }
                                     }
                                     @if (pedido.Estado == estado.EnCurso)
                                     {
-                                        <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.NumPedido" class="pedido-estado">Entregar</a>
+                                        <a asp-controller="Pedido" asp-action="Estado" asp-route-id="@pedido.Nro" class="pedido-estado">Entregar</a>
                                     }
-                                    <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.NumPedido" class="pedido-borrar">Borrar</a>
-                                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.NumPedido" class="pedido-detalles">Detalles</a>
+                                    @if(Context.Session.GetInt32("rol") == 1)
+                                    {
+                                        <a asp-controller="Pedido" asp-action="Delete" asp-route-id="@pedido.Nro" class="pedido-borrar">Borrar</a>
+                                    }
+                                    <a asp-controller="Pedido" asp-action="Details" asp-route-id="@pedido.Nro" class="pedido-detalles">Detalles</a>
                                 </section>
                             </td>
+                            
+                            
 
                         </tr>
                     }

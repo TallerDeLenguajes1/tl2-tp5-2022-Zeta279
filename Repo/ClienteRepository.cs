@@ -111,7 +111,7 @@ namespace Cadeteria.Repo
                 // Ingresar cliente
                 reader.Close();
                 comando.CommandText = "INSERT INTO cliente VALUES ($id, $nom, $direc, $tel);";
-                comando.Parameters.AddWithValue("id", cliente.ID);
+                comando.Parameters.AddWithValue("id", id);
                 comando.Parameters.AddWithValue("$nom", cliente.Nombre);
                 comando.Parameters.AddWithValue("$direc", cliente.Direccion);
                 comando.Parameters.AddWithValue("$tel", cliente.Telefono);
