@@ -20,16 +20,20 @@
     
     <section id="filtrar-pedidos">
         <form method="post">
-            <label for="filtrar-cadete">Cadete
-            <select name="idCadete" id="filtrar-cadete">
-                <option value="0">Cualquier cadete</option>
-                @foreach(var cadete in (List<Cadeteria.ViewModels.CadeteViewModel>)ViewData["cadetes"])
-                {
-                    <option value="@cadete.ID">@cadete.Nombre</option>
-                }
-            </select>
-            </label>
-            <label for="filtrar-cliente">Cliente
+            @if(Context.Session.GetInt32("rol") == 1)
+            {
+                <label for="filtrar-cadete">Cadete
+                <select name="idCadete" id="filtrar-cadete">
+                    <option value="0">Cualquier cadete</option>
+                    @foreach(var cadete in (List<Cadeteria.ViewModels.CadeteViewModel>)ViewData["cadetes"])
+                    {
+                        <option value="@cadete.ID">@cadete.Nombre</option>
+                    }
+                </select>
+                </label>
+            }
+            <label for="filtrar-cliente">
+                Cliente
             <select name="idCliente" id="filtrar-cliente">
                 <option value="0">Cualquier cliente</option>
                     @foreach (var cliente in (List<Cadeteria.ViewModels.ClienteViewModel>)ViewData["clientes"])

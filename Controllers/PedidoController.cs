@@ -52,7 +52,7 @@ namespace Cadeteria.Controllers
 
             if (HttpContext.Session.GetInt32("rol") != 1)
             {
-                return RedirectToAction("Index", "Home");
+                idCadete = (int)HttpContext.Session.GetInt32("id_cadete");
             }
 
             ViewData["clientes"] = mapper.Map<List<ClienteViewModel>>(ClienteRepo.ObtenerTodo());
@@ -73,9 +73,16 @@ namespace Cadeteria.Controllers
                     pedidosCliente = PedidoRepo.ObtenerPorCliente(idCliente);
                     pedidosCadete = PedidoRepo.ObtenerPorCadete(idCadete);
 
-                    foreach (var pedido in pedidosCliente)
+                    foreach (var pedido1 in pedidosCliente)
                     {
-                        if (pedidosCadete.Contains(pedido)) pedidosFiltrados.Add(pedido);
+                        foreach (var pedido2 in pedidosCadete)
+                        {
+                            if (pedido1 == pedido2)
+                            {
+                                pedidosFiltrados.Add(pedido1);
+                                break;
+                            }
+                        }
                     }
                 }
                 else

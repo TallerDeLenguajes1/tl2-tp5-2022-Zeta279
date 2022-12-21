@@ -37,7 +37,15 @@
                             </li>
                         }
 
-                        <li class="nav-item">
+                        <li class="nav-item" id="log-option">
+                            @if(Context.Session.GetInt32("rol") == 1)
+                            {
+                                <section>@Context.Session.GetString("name") (Admin)</section>
+                            }
+                            else
+                            {
+                                <section>@Context.Session.GetString("name") (Cadete)</section>
+                            }
                             <a class="nav-link text-dark" asp-controller="Logging" asp-action="Logout"><strong>Cerrar sesión</strong></a>
                         </li>
                         
